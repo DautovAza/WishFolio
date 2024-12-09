@@ -1,0 +1,6 @@
+@WishFolio.WebApi_HostAddress = http://localhost:5077
+
+GET {{WishFolio.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

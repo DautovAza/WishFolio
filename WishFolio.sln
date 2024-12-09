@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A800B688-6A6F-48D2-94AA-EDE3CCE70880}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WishFolio.Domain", "src\API\WishFolio.Domain\WishFolio.Domain.csproj", "{C914F7C0-F66B-4E27-A58E-698276F50447}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{99031CA5-A686-4835-82CC-C2F1FC27B4ED}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{3DDAC2B1-6081-480B-9B40-2D8896134EC7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WishFolio.Infrastructure", "src\API\WishFolio.Infrastructure\WishFolio.Infrastructure.csproj", "{95ACD87A-FED9-4D7E-8B66-32E24BC99AA9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WishFolio.Application", "src\API\WishFolio.Application\WishFolio.Application.csproj", "{367BBE62-6CC7-487A-A23B-B636C3E008D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WishFolio.WebApi", "src\API\WishFolio.WebApi\WishFolio.WebApi.csproj", "{2240F7C6-08E1-4A20-9230-F5D1EE1A743C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C914F7C0-F66B-4E27-A58E-698276F50447}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C914F7C0-F66B-4E27-A58E-698276F50447}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C914F7C0-F66B-4E27-A58E-698276F50447}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C914F7C0-F66B-4E27-A58E-698276F50447}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95ACD87A-FED9-4D7E-8B66-32E24BC99AA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95ACD87A-FED9-4D7E-8B66-32E24BC99AA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95ACD87A-FED9-4D7E-8B66-32E24BC99AA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95ACD87A-FED9-4D7E-8B66-32E24BC99AA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{367BBE62-6CC7-487A-A23B-B636C3E008D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{367BBE62-6CC7-487A-A23B-B636C3E008D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{367BBE62-6CC7-487A-A23B-B636C3E008D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{367BBE62-6CC7-487A-A23B-B636C3E008D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2240F7C6-08E1-4A20-9230-F5D1EE1A743C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2240F7C6-08E1-4A20-9230-F5D1EE1A743C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2240F7C6-08E1-4A20-9230-F5D1EE1A743C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2240F7C6-08E1-4A20-9230-F5D1EE1A743C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C914F7C0-F66B-4E27-A58E-698276F50447} = {99031CA5-A686-4835-82CC-C2F1FC27B4ED}
+		{99031CA5-A686-4835-82CC-C2F1FC27B4ED} = {A800B688-6A6F-48D2-94AA-EDE3CCE70880}
+		{3DDAC2B1-6081-480B-9B40-2D8896134EC7} = {A800B688-6A6F-48D2-94AA-EDE3CCE70880}
+		{95ACD87A-FED9-4D7E-8B66-32E24BC99AA9} = {99031CA5-A686-4835-82CC-C2F1FC27B4ED}
+		{367BBE62-6CC7-487A-A23B-B636C3E008D3} = {99031CA5-A686-4835-82CC-C2F1FC27B4ED}
+		{2240F7C6-08E1-4A20-9230-F5D1EE1A743C} = {99031CA5-A686-4835-82CC-C2F1FC27B4ED}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8A48254C-3E67-47D4-A94C-C517B2ECDE31}
+	EndGlobalSection
+EndGlobal
