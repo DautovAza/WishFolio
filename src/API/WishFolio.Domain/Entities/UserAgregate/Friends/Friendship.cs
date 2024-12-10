@@ -12,6 +12,7 @@ public class Friendship
         UserId = userId;
         FriendId = friendId;
         CreatedAt = DateTime.UtcNow;
+        Status = FriendshipStatus.Pending;
     }
 
     public void Accept()

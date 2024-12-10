@@ -7,11 +7,11 @@ namespace WishFolio.Domain.Entities.UserAgregate.ValueObjects
     {
         private static readonly Regex _emailRegex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private string Address { get; }
+        public string Address { get; }
 
         public Email(string email)
         {
-            if (string.IsNullOrWhiteSpace(email) || !_emailRegex.IsMatch(email))
+            if (string.IsNullOrEmpty(email) || !_emailRegex.IsMatch(email))
             {
                 throw new ArgumentException("Неверный формат email.");
             }
