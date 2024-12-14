@@ -1,5 +1,5 @@
 ﻿using System.Text.RegularExpressions;
-using WishFolio.Domain.Abstractions;
+using WishFolio.Domain.Abstractions.Entities;
 
 namespace WishFolio.Domain.Entities.UserAgregate.ValueObjects
 {
@@ -9,13 +9,13 @@ namespace WishFolio.Domain.Entities.UserAgregate.ValueObjects
 
         public string Address { get; }
 
-        public Email(string email)
+        public Email(string address)
         {
-            if (string.IsNullOrEmpty(email) || !_emailRegex.IsMatch(email))
+            if (string.IsNullOrEmpty(address) || !_emailRegex.IsMatch(address))
             {
                 throw new ArgumentException("Неверный формат email.");
             }
-            Address = email;
+            Address = address;
         }
 
         protected override IEnumerable<object> GetEqualityComponents()

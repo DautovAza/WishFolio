@@ -24,6 +24,4 @@ public class UserProfile
         Name = name;
         Age = age;
     }
-
-    
 }

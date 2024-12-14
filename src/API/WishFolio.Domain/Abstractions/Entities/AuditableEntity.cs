@@ -1,8 +1,8 @@
-﻿namespace WishFolio.Domain.Abstractions;
+﻿namespace WishFolio.Domain.Abstractions.Entities;
 
 public abstract class AuditableEntity : IEntity
 {
-    private AuditableEntity() { }
+    protected AuditableEntity() { }
 
     protected AuditableEntity(Guid id, DateTime createdAt)
     {

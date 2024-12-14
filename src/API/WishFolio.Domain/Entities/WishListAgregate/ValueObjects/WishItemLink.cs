@@ -1,4 +1,4 @@
-﻿using WishFolio.Domain.Abstractions;
+﻿using WishFolio.Domain.Abstractions.Entities;
 
 namespace WishFolio.Domain.Entities.WishListAgregate.ValueObjects
 {

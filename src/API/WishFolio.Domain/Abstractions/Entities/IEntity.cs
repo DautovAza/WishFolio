@@ -1,4 +1,4 @@
-﻿namespace WishFolio.Domain.Abstractions;
+﻿namespace WishFolio.Domain.Abstractions.Entities;
 
 public interface IEntity
 {

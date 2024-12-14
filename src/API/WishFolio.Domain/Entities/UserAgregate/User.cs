@@ -1,4 +1,4 @@
-﻿using WishFolio.Domain.Abstractions;
+﻿using WishFolio.Domain.Abstractions.Entities;
 using WishFolio.Domain.Entities.UserAgregate.Friends;
 using WishFolio.Domain.Entities.UserAgregate.Notifications;
 using WishFolio.Domain.Entities.UserAgregate.Profile;
@@ -12,10 +12,13 @@ public class User : AuditableEntity
     private readonly List<Notification> _notifications;
 
     public Email Email { get; private set; }
+    public string PasswordHash { get; private set; } // TODO: добавить хеширование пароля
     public UserProfile Profile { get; private set; }
 
     public IReadOnlyCollection<Friendship> Friends => _friends.AsReadOnly();
     public IReadOnlyList<Notification> Notifications => _notifications.AsReadOnly();
+
+    private User() : base() { }
 
     public User(string email, string name, int age)
         : base(Guid.NewGuid(), DateTime.UtcNow)
@@ -23,6 +26,16 @@ public class User : AuditableEntity
         Email = new Email(email);
         Profile = new UserProfile(name, age);
         _friends = new List<Friendship>();
+    }
+
+    public void SetPassword(string password, IPasswordHasher hasher)
+    {
+        PasswordHash = hasher.HashPassword(password);
+    }
+
+    public bool ValidatePassword(string password, IPasswordHasher hasher)
+    {
+        return hasher.VerifyPassword(PasswordHash, password);
     }
 
     public void AddFriend(Guid friendId)

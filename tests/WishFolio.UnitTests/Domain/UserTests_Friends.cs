@@ -9,7 +9,7 @@ public class UserTests_Friends
     public void AddFriend_ShouldAddFriendship()
     {
         // Arrange
-        var user1 = new User("user1@example.com","Tester1",40);
+        var user1 = new User("user1@example.com","Tester1", 40);
         var user2 = new User("user2@example.com","Tester2", 40);
        
         // Act
@@ -25,8 +25,8 @@ public class UserTests_Friends
     public void AcceptFriendRequest_ShouldChangeStatus()
     {
         // Arrange
-        var user1 = new User("user1@example.com", "Tester1", 40);
-        var user2 = new User("user2@example.com", "Tester2", 40);
+        var user1 = new User("user1@example.com", "Tester1",  40);
+        var user2 = new User("user2@example.com", "Tester2",  40);
         user1.AddFriend(user2.Id);
 
         // Act

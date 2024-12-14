@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WishFolio.Application", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WishFolio.WebApi", "src\API\WishFolio.WebApi\WishFolio.WebApi.csproj", "{2240F7C6-08E1-4A20-9230-F5D1EE1A743C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WishFolio.UnitTests", "tests\WishFolio.UnitTests\WishFolio.UnitTests.csproj", "{C5ACBAF5-CAFF-45EF-835B-E46B7CA72AC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WishFolio.UnitTests", "tests\WishFolio.UnitTests\WishFolio.UnitTests.csproj", "{C5ACBAF5-CAFF-45EF-835B-E46B7CA72AC9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
