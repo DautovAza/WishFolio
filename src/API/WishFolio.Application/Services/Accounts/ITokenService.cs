@@ -1,6 +1,6 @@
 ﻿using WishFolio.Domain.Entities.UserAgregate;
 
-namespace WishFolio.Application.Services.AccountServices;
+namespace WishFolio.Application.Services.Accounts;
 
 public interface ITokenService
 {

@@ -3,6 +3,9 @@
 public enum NotificationType
 {
     GiftAdded,
+    FriendshipRequested,
+    FriendshipAccepted,
+    FriendshipDeslined,
     HolidayReminder,
-    Custom
+    Custom,
 }

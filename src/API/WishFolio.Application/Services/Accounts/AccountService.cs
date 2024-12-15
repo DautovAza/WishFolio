@@ -1,9 +1,9 @@
-﻿using WishFolio.Domain.Abstractions.Entities;
+﻿using WishFolio.Domain.Abstractions.Auth;
 using WishFolio.Domain.Abstractions.Repositories;
 using WishFolio.Domain.Entities.UserAgregate;
 using WishFolio.Domain.Entities.UserAgregate.ValueObjects;
 
-namespace WishFolio.Application.Services.AccountServices;
+namespace WishFolio.Application.Services.Accounts;
 
 public class AccountService : IAccountService
 {

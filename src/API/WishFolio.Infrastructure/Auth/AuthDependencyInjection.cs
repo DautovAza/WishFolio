@@ -4,9 +4,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using WishFolio.Domain.Abstractions.Repositories;
-using WishFolio.Application.Services.AccountServices;
+using WishFolio.Application.Services.Accounts;
 using WishFolio.Infrastructure.Dal.Repositories;
-using WishFolio.Domain.Abstractions.Entities;
+using WishFolio.Domain.Abstractions.Auth;
 
 namespace WishFolio.Infrastructure.Auth;
 
@@ -49,5 +49,6 @@ public static class AuthDependencyInjection
         });
 
         services.AddScoped<IPasswordHasher,PasswordHasher>();
+        services.AddScoped<ICurrentUserService,CurrentUserService>();
     }
 }

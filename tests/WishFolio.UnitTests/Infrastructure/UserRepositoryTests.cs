@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Moq;
-using WishFolio.Domain.Abstractions.Entities;
+using WishFolio.Domain.Abstractions.Auth;
 using WishFolio.Domain.Entities.UserAgregate;
 using WishFolio.Domain.Entities.UserAgregate.ValueObjects;
 using WishFolio.Infrastructure.Dal;

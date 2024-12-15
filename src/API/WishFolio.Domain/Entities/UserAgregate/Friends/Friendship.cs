@@ -17,7 +17,7 @@ public class Friendship
 
     public void Accept()
     {
-        if (Status != FriendshipStatus.Pending)
+        if (Status < FriendshipStatus.Pending || Status > FriendshipStatus.Requested)
         {
             throw new InvalidOperationException("Нельзя подтвердить несуществующий запрос.");
         }
@@ -27,11 +27,19 @@ public class Friendship
 
     public void Decline()
     {
-        if (Status != FriendshipStatus.Pending)
+        if (Status == FriendshipStatus.Declined)
         {
             throw new InvalidOperationException("Нельзя отклонить несуществующий запрос.");
         }
 
         Status = FriendshipStatus.Declined;
+    }
+
+    public static Friendship CreateFriendshipRequest(Guid userId, Guid friendId)
+    {
+        return new Friendship(userId, friendId)
+        {
+            Status = FriendshipStatus.Requested,
+        };
     }
 }

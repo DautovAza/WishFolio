@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Swashbuckle.AspNetCore.Annotations;
 using WishFolio.WebApi.Controllers.Dtos;
-using WishFolio.Application.Services.AccountServices;
+using WishFolio.Application.Services.Accounts;
 
 namespace WishFolio.WebApi.Controllers;
 

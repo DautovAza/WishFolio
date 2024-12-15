@@ -9,6 +9,8 @@ builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddWishFolioSwagger();
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddJwtAuth(builder.Configuration);
 builder.Services.AddDbContext<WishFolioContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreConnection")));

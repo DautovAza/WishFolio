@@ -1,4 +1,4 @@
-﻿namespace WishFolio.Domain.Abstractions.Entities;
+﻿namespace WishFolio.Domain.Abstractions.Auth;
 
 public interface IPasswordHasher
 {

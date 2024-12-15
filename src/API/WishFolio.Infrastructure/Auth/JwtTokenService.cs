@@ -4,7 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 using WishFolio.Domain.Entities.UserAgregate;
-using WishFolio.Application.Services.AccountServices;
+using WishFolio.Application.Services.Accounts;
 
 namespace WishFolio.Infrastructure.Auth;
 

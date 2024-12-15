@@ -1,6 +1,6 @@
 ﻿using System.Text;
 using System.Security.Cryptography;
-using WishFolio.Domain.Abstractions.Entities;
+using WishFolio.Domain.Abstractions.Auth;
 
 namespace WishFolio.Infrastructure.Auth;
 

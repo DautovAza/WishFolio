@@ -4,6 +4,7 @@ public enum FriendshipStatus
 {
     None = 0,
     Pending,
+    Requested,
     Accepted,
     Declined
 }

@@ -1,6 +1,6 @@
 ﻿using Moq;
-using WishFolio.Application.Services.AccountServices;
-using WishFolio.Domain.Abstractions.Entities;
+using WishFolio.Application.Services.Accounts;
+using WishFolio.Domain.Abstractions.Auth;
 using WishFolio.Domain.Abstractions.Repositories;
 using WishFolio.Domain.Entities.UserAgregate;
 using WishFolio.Domain.Entities.UserAgregate.ValueObjects;
