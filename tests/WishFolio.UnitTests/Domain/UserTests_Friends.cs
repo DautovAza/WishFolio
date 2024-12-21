@@ -39,7 +39,7 @@ public class UserTests_Friends
     }
 
     [Fact]
-    public void DeslineFriendReques_ShouldChangeStatusToDeslined()
+    public void DeslineFriendRequest_ShouldChangeStatusToDeslined()
     {
         // Arrange
         var user1 = new User("user1@example.com", "Tester1", 40);
@@ -55,7 +55,7 @@ public class UserTests_Friends
     }
 
     [Fact]
-    public void RemoveFriendReques_ShouldChangeStatusToDeslined()
+    public void RemoveFriendRequest_ShouldChangeStatusToDeslined()
     {
         // Arrange
         var user1 = new User("user1@example.com", "Tester1", 40);
