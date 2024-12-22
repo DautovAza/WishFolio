@@ -2,6 +2,7 @@
 using WishFolio.Domain.Entities.UserAgregate;
 using WishFolio.Domain.Entities.UserAgregate.ValueObjects;
 using WishFolio.Domain.Abstractions.Repositories;
+using WishFolio.Domain.Entities.UserAgregate.Profile;
 
 namespace WishFolio.Infrastructure.Dal.Repositories;
 
@@ -50,5 +51,13 @@ public class UserRepository : IUserRepository
     public async Task SaveChangesAsync()
     {
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<UserProfile> GetProfileByIdAsync(Guid id)
+    {
+       return (await _context.Users
+            .Include(u=>u.Profile)
+            .FirstOrDefaultAsync(u => u.Id == id))?
+            .Profile;
     }
 }

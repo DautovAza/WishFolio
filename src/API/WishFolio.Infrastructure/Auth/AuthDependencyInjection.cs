@@ -18,7 +18,6 @@ public static class AuthDependencyInjection
         services.AddAuthorization();
 
         services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<IAccountService, AccountService>();
         services.AddScoped<ITokenService, JwtTokenService>();
 
         return services;

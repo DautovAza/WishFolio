@@ -7,7 +7,7 @@ using WishFolio.Domain.Entities.UserAgregate.ValueObjects;
 
 namespace WishFolio.UnitTests.Application;
 
-public class AccountServiseTests
+public class AccountServiceTests
 {
 
     private readonly Mock<IUserRepository> _userRepositoryMock;
@@ -15,7 +15,7 @@ public class AccountServiseTests
     private readonly Mock<IPasswordHasher> _passwordHasherMoq;
     private readonly AccountService _accountService;
 
-    public AccountServiseTests()
+    public AccountServiceTests()
     {
         _userRepositoryMock = new Mock<IUserRepository>();
         _tokenServiceMock = new Mock<ITokenService>();

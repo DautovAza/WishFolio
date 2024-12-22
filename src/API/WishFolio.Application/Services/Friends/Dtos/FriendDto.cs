@@ -6,4 +6,5 @@ public record class FriendDto
 {
     public Guid Id { get; set; }
     public FriendshipStatus Status { get; set; }
+    public string Name { get; set; }
 }

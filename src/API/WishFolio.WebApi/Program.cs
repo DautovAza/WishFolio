@@ -2,14 +2,19 @@ using Microsoft.EntityFrameworkCore;
 using WishFolio.Infrastructure.Auth;
 using WishFolio.Infrastructure.Dal;
 using WishFolio.Infrastructure.Swagger;
+using WishFolio.Application.DI;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddApplicationServices();
 builder.Services.AddWishFolioSwagger();
 builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddJwtAuth(builder.Configuration);
 builder.Services.AddDbContext<WishFolioContext>(options =>
@@ -17,18 +22,15 @@ builder.Services.AddDbContext<WishFolioContext>(options =>
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<WishFolioContext>();
-    db.Database.Migrate();
-}
-// Configure the HTTP request pipeline.
+app.ApplyMigrations();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
