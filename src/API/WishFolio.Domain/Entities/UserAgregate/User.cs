@@ -4,6 +4,7 @@ using WishFolio.Domain.Entities.UserAgregate.Friends;
 using WishFolio.Domain.Entities.UserAgregate.Profile;
 using WishFolio.Domain.Entities.UserAgregate.Notifications;
 using WishFolio.Domain.Entities.UserAgregate.ValueObjects;
+using WishFolio.Domain.Entities.WishListAgregate;
 
 namespace WishFolio.Domain.Entities.UserAgregate;
 
@@ -83,6 +84,20 @@ public class User : AuditableEntity
         outerFriendship.Accept();
 
         friend.AddNotification(new Notification(friend.Id, NotificationType.FriendshipAccepted, $"Ваш запрос в друзья был одобрен пользователем {Profile.Name}"));
+    }
+
+    public VisabilityLevel GetWihListVisabilityLevelForUser(Guid otherUserId)
+    {
+        if (otherUserId == Id)
+        {
+            return VisabilityLevel.Private;
+        }
+        if (_friends.Any(f => f.FriendId == otherUserId))
+        {
+            return VisabilityLevel.FriendsOnly;
+        }
+        return VisabilityLevel.Public;
+
     }
 
     private Friendship FindFriendshipWithUser(Guid friendId)

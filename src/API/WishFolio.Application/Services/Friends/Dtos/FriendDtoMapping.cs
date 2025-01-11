@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using WishFolio.Domain.Entities.UserAgregate.Friends;
-using WishFolio.Domain.Entities.UserAgregate.Profile;
 
 namespace WishFolio.Application.Services.Friends.Dtos;
 

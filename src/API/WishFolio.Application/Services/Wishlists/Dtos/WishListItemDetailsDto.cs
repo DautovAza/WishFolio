@@ -1,0 +1,13 @@
+﻿using WishFolio.Domain;
+
+namespace WishFolio.Application.Services.Wishlists.Dtos;
+
+public record WishListItemDetailsDto
+{
+    public Guid Id { get; set; }
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public string Uri { get; set; }
+    public ReservationStatus Status { get; set; }
+    public string ReservedBy { get; set; }
+}

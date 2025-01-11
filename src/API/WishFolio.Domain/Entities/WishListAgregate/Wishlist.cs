@@ -1,36 +1,41 @@
 ﻿namespace WishFolio.Domain.Entities.WishListAgregate;
 
-public class Wishlist
+public class WishList
 {
     private readonly List<WishlistItem> _items;
 
-    public Guid WishlistId { get; private set; }
+    public Guid Id { get; private set; }
     public Guid OwnerId { get; private set; }
-    public string Title { get; private set; }
+    public string Name { get; private set; }
     public string Description { get; private set; }
-    public VisibilityLevel Visibility { get; private set; }
+    public VisabilityLevel Visibility { get; private set; }
     public IReadOnlyList<WishlistItem> Items => _items.AsReadOnly();
 
-    public Wishlist(Guid ownerId, string title, string description, VisibilityLevel visibility)
+    public WishList(Guid ownerId, string name, string description, VisabilityLevel visibility, bool isUniqNameForUser)
     {
-        if (string.IsNullOrWhiteSpace(title))
+        if (string.IsNullOrWhiteSpace(name))
         {
             throw new ArgumentException("Название списока желаний не может быть пустым.");
         }
 
-        WishlistId = Guid.NewGuid();
+        if (!isUniqNameForUser)
+        {
+            throw new Exception("Имя виш-листа уже существует для данного пользователя");
+        }
+
+        Id = Guid.NewGuid();
         OwnerId = ownerId;
-        Title = title;
+        Name = name;
         Description = description;
         Visibility = visibility;
         _items = new List<WishlistItem>();
     }
 
-    public void Update(string title, string description, VisibilityLevel visibility)
+    public void Update(string name, string description, VisabilityLevel visibility)
     {
-        if (!string.IsNullOrWhiteSpace(title))
+        if (!string.IsNullOrWhiteSpace(name))
         {
-            Title = title;
+            Name = name;
         }
         if (description != null)
         {
@@ -42,7 +47,7 @@ public class Wishlist
 
     public void AddItem(WishlistItem item)
     {
-        if (_items.Any(i => i.ItemId == item.ItemId))
+        if (_items.Any(i => i.Id == item.Id))
         {
             throw new InvalidOperationException("Элемент уже добавлен в список желаний.");
         }
@@ -52,7 +57,7 @@ public class Wishlist
 
     public void RemoveItem(Guid itemId)
     {
-        var item = _items.FirstOrDefault(i => i.ItemId == itemId);
+        var item = _items.FirstOrDefault(i => i.Id == itemId);
         if (item == null)
         {
             throw new KeyNotFoundException("Элемент не найден в списке желаний.");

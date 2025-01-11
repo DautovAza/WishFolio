@@ -1,12 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using WishFolio.Domain.Abstractions.Entities;
+using WishFolio.Domain.Entities.UserAgregate;
 using WishFolio.Domain.Entities.WishListAgregate.ValueObjects;
 
 namespace WishFolio.Domain.Entities.WishListAgregate;
 
-public class WishlistItem
+public class WishlistItem : AuditableEntity
 {
     [Required]
-    public Guid ItemId { get; private set; }
+    public Guid Id { get; private set; }
 
     [Required]
     [MinLength(WishlistItemInvariants.NameMinLength)]
@@ -18,21 +20,31 @@ public class WishlistItem
 
     public WishItemLink Link { get; private set; }
 
-    public WishlistItem(string name, string description, WishItemLink link)
+    public Guid? ReservationUserId { get; private set; }
+    public ReservationStatus ReservationStatus { get; private set; }
+
+    private WishlistItem() : base() { }
+
+    public WishlistItem(string name, string description, string uri)
     {
         if (string.IsNullOrWhiteSpace(name))
         {
             throw new ArgumentException("Название элемента не может быть пустым.");
         }
 
-        ItemId = Guid.NewGuid();
+        Id = Guid.NewGuid();
         Name = name;
         Description = description;
-        Link = link;
+        Link = new WishItemLink(uri);
     }
 
-    public void Update(string name, string description, WishItemLink link)
+    public void Update(string name, string description, string link)
     {
+        if (ReservationStatus != ReservationStatus.Available)
+        {
+            throw new Exception("Нельзя изменить параметры, т.к. это объект забронирован другим пользователем!");
+        }
+
         if (!string.IsNullOrWhiteSpace(name))
         {
             Name = name;
@@ -41,9 +53,41 @@ public class WishlistItem
         {
             Description = description;
         }
-        if (Link != null)
+        if (!string.IsNullOrWhiteSpace(link))
         {
-            Link = link;
+            Link = new WishItemLink(link);
         }
+    }
+
+    public void ReserveItem(User user, bool isAnonymous)
+    {
+        if (ReservationStatus != ReservationStatus.Available)
+        {
+            throw new Exception("Нельзя забронирован, т.к. это объект забронирован другим пользователем!");
+        }
+
+        ReservationStatus = isAnonymous ? ReservationStatus.ReservedAnonymous : ReservationStatus.Reserved;
+        ReservationUserId = user.Id;
+    }
+
+    public void CancelReservation(User user)
+    {
+        if (ReservationStatus != ReservationStatus.Reserved || user.Id != ReservationUserId)
+        {
+            throw new Exception("Нельзя снять бронь, т.к. это объект зарезервирован другим пользователем!");
+        }
+
+        ReservationStatus = ReservationStatus.Available;
+        ReservationUserId = user.Id;
+    }
+
+    public void CloseReservation(User user)
+    {
+        if (ReservationStatus != ReservationStatus.Reserved || user.Id != ReservationUserId)
+        {
+            throw new Exception("Нельзя подтверддить бронь, т.к. это объект зарезервирован другим пользователем!");
+        }
+
+        ReservationStatus = ReservationStatus.Clsoed;
     }
 }

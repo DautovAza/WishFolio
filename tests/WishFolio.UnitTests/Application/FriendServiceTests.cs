@@ -6,6 +6,7 @@ using WishFolio.Application.Services.Friends;
 using WishFolio.Domain.Entities.UserAgregate.Friends;
 using AutoMapper;
 using WishFolio.Application.Services.Friends.Dtos;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace WishFolio.UnitTests.Application;
 
@@ -19,11 +20,19 @@ public class FriendServiceTests
 
     public FriendServiceTests()
     {
+        var services = new ServiceCollection();
+
         _passwordHasherMoq = new Mock<IPasswordHasher>();
         _userRepositoryMock = new Mock<IUserRepository>();
         _currentUserServiceMock = new Mock<ICurrentUserService>();
-        _mapper = new MapperConfiguration(e => e.AddProfile(new FriendDtoMapping(_userRepositoryMock.Object)))
-            .CreateMapper();
+
+        services.AddSingleton(_userRepositoryMock.Object);
+        services.AddTransient<ProfileNameResolver>();
+        services.AddAutoMapper(cfg => cfg.AddProfile<FriendDtoMapping>());
+
+        var serviceProvider = services.BuildServiceProvider();
+
+        _mapper =serviceProvider.GetRequiredService<IMapper>();
 
         _passwordHasherMoq.Setup(f => f.VerifyPassword(It.IsAny<string>(), It.IsAny<string>())).Returns(true);
     }
@@ -31,7 +40,6 @@ public class FriendServiceTests
     [Fact]
     public async Task GetFriends_UserNotFound_ThrowsKeyNotFoundException()
     {
-
         var friendService = new FriendService(_userRepositoryMock.Object, _currentUserServiceMock.Object, _mapper);
 
         _userRepositoryMock.Setup(r => r.GetByIdAsync(It.IsAny<Guid>()))

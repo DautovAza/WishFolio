@@ -55,9 +55,9 @@ public class UserRepository : IUserRepository
 
     public async Task<UserProfile> GetProfileByIdAsync(Guid id)
     {
-       return (await _context.Users
-            .Include(u=>u.Profile)
-            .FirstOrDefaultAsync(u => u.Id == id))?
-            .Profile;
+        return (await _context.Users
+             .Include(u => u.Profile)
+             .FirstOrDefaultAsync(u => u.Id == id))?
+             .Profile;
     }
 }
