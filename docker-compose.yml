@@ -1,0 +1,36 @@
+version: '3.4'
+
+services:
+  wishfolio.webapi:
+    image: ${DOCKER_REGISTRY-}wishfoliowebapi
+    container_name: Wish-list.api
+    env_file:
+      - .env
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+    build:
+      context: .
+      dockerfile: src/API/WishFolio.WebApi/Dockerfile
+    networks:
+      - app-network
+    depends_on: 
+      - db
+
+  db:
+    image: postgres:latest
+    container_name:  Wish-list.database
+    ports:
+      - 15432:5432
+    env_file:
+      - .env
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+volumes:
+  db-data:
+
+networks:
+  app-network:

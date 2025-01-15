@@ -9,6 +9,9 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/API/WishFolio.WebApi/WishFolio.WebApi.csproj", "src/API/WishFolio.WebApi/"]
+COPY ["src/API/WishFolio.Infrastructure/WishFolio.Infrastructure.csproj", "src/API/WishFolio.Infrastructure/"]
+COPY ["src/API/WishFolio.Application/WishFolio.Application.csproj", "src/API/WishFolio.Application/"]
+COPY ["src/API/WishFolio.Domain/WishFolio.Domain.csproj", "src/API/WishFolio.Domain/"]
 RUN dotnet restore "./src/API/WishFolio.WebApi/WishFolio.WebApi.csproj"
 COPY . .
 WORKDIR "/src/src/API/WishFolio.WebApi"

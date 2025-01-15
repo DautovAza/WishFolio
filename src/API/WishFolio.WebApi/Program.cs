@@ -22,10 +22,11 @@ builder.Services.AddDbContext<WishFolioContext>(options =>
 
 var app = builder.Build();
 
-app.ApplyMigrations();
+var sets = app.Configuration["JWT:Key"];
 
 if (app.Environment.IsDevelopment())
 {
+    app.ApplyMigrations();
     app.UseSwagger();
     app.UseSwaggerUI();
 }

@@ -11,6 +11,8 @@ public class WishList
     public VisabilityLevel Visibility { get; private set; }
     public IReadOnlyList<WishlistItem> Items => _items.AsReadOnly();
 
+    private WishList() { }
+
     public WishList(Guid ownerId, string name, string description, VisabilityLevel visibility, bool isUniqNameForUser)
     {
         if (string.IsNullOrWhiteSpace(name))

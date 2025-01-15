@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WishFolio.WebApi", "src\API
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WishFolio.UnitTests", "tests\WishFolio.UnitTests\WishFolio.UnitTests.csproj", "{C5ACBAF5-CAFF-45EF-835B-E46B7CA72AC9}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{E3C7F19A-1405-44E9-9F11-3B7EAF2E09A3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{C5ACBAF5-CAFF-45EF-835B-E46B7CA72AC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5ACBAF5-CAFF-45EF-835B-E46B7CA72AC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5ACBAF5-CAFF-45EF-835B-E46B7CA72AC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3C7F19A-1405-44E9-9F11-3B7EAF2E09A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3C7F19A-1405-44E9-9F11-3B7EAF2E09A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3C7F19A-1405-44E9-9F11-3B7EAF2E09A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3C7F19A-1405-44E9-9F11-3B7EAF2E09A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

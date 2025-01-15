@@ -6,12 +6,23 @@ using WishFolio.Domain.Entities.WishListAgregate;
 
 namespace WishFolio.Application.Services.Wishlists;
 
-public class WishListsService
+public class WishListsService : IWishListsService
 {
     private readonly ICurrentUserService _currentUserService;
     private readonly IUserRepository _userRepository;
     private readonly IWishListRepository _wishListRepository;
     private readonly IMapper _mapper;
+
+    public WishListsService(ICurrentUserService currentUserService, 
+        IUserRepository userRepository,
+        IWishListRepository wishListRepository, 
+        IMapper mapper)
+    {
+        _currentUserService = currentUserService;
+        _userRepository = userRepository;
+        _wishListRepository = wishListRepository;
+        _mapper = mapper;
+    }
 
     public async Task<List<WishListDto>> GetAllUserWishListsAsync(Guid userId)
     {
@@ -22,17 +33,6 @@ public class WishListsService
         var wishlists = await _wishListRepository.GetOwnerWishListsAsync(userId, visabilityLevel);
 
         return _mapper.Map<List<WishListDto>>(wishlists);
-    }
-
-    public async Task<WishListDto?> GetUserWishListByNameAsync(Guid userId, string name)
-    {
-        var currentUserId = _currentUserService.GetCurrentUserId();
-        var user = await _userRepository.GetByIdAsync(userId);
-
-        var visabilityLevel = user.GetWihListVisabilityLevelForUser(userId);
-        var wishlist = await _wishListRepository.GetOwnerWishListByNameAsync(userId, name, visabilityLevel);
-
-        return _mapper.Map<WishListDto>(wishlist);
     }
 
     public async Task AddWishListAsync(string name, string description, VisabilityLevel visabilityLevel)
@@ -109,7 +109,7 @@ public class WishListsService
     {
         var currentUserId = _currentUserService.GetCurrentUserId();
         var wishlist = await _wishListRepository.GetOwnerWishListByNameAsync(currentUserId, wishListName, VisabilityLevel.Private);
-        
+
         wishlist.RemoveItem(itemId);
 
         await _wishListRepository.SaveChangesAsync();

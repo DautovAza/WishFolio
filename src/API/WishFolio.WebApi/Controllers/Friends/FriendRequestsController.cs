@@ -7,7 +7,7 @@ namespace WishFolio.WebApi.Controllers.Friends;
 
 [Authorize]
 [ApiController]
-[Route("api/[controller]-")]
+[Route("api/friends/[controller]")]
 public class FriendRequestsController : ControllerBase
 {
     private readonly IFriendService _friendService;

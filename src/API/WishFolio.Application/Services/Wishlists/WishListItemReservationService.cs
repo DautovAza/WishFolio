@@ -3,11 +3,20 @@ using WishFolio.Domain.Abstractions.Repositories;
 
 namespace WishFolio.Application.Services.Wishlists;
 
-public class WishListItemReservationService
+public class WishListItemReservationService : IWishListItemReservationService
 {
     private readonly ICurrentUserService _currentUserService;
     private readonly IUserRepository _userRepository;
     private readonly IWishListRepository _wishListRepository;
+
+    public WishListItemReservationService(ICurrentUserService currentUserService, 
+        IUserRepository userRepository,
+        IWishListRepository wishListRepository)
+    {
+        _currentUserService = currentUserService;
+        _userRepository = userRepository;
+        _wishListRepository = wishListRepository;
+    }
 
     public async Task ReserveItem(Guid itemId, bool isAnonymous)
     {
