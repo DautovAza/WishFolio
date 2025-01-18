@@ -9,6 +9,9 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
+    ports:
+      - 1000:8080  
+
     build:
       context: .
       dockerfile: src/API/WishFolio.WebApi/Dockerfile
@@ -20,8 +23,6 @@ services:
   db:
     image: postgres:latest
     container_name:  Wish-list.database
-    ports:
-      - 15432:5432
     env_file:
       - .env
     volumes:
