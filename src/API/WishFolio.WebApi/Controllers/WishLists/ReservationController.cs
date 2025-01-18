@@ -6,7 +6,7 @@ namespace WishFolio.WebApi.Controllers.WishLists;
 
 [Authorize]
 [ApiController]
-[Route("api/{userId:guid}/WishLists/{wishListName}/{itemId:guid}[controller]")]
+[Route("api/{userId:guid}/WishLists/{wishListName}/{itemId:guid}/[controller]")]
 public class ReservationController : ControllerBase
 {
     private readonly IWishListItemReservationService _wishListsService;
