@@ -182,8 +182,7 @@ namespace WishFolio.Infrastructure.Migrations
 
                             b1.Property<string>("Name")
                                 .IsRequired()
-                                .HasMaxLength(60)
-                                .HasColumnType("character varying(60)");
+                                .HasColumnType("text");
 
                             b1.HasKey("UserId");
 

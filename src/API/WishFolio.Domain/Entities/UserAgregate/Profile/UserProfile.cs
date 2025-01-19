@@ -1,27 +1,61 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using WishFolio.Domain.Errors;
+using WishFolio.Domain.Shared.ResultPattern;
 
 namespace WishFolio.Domain.Entities.UserAgregate.Profile;
 
 public class UserProfile
 {
-    [Required]
-    [MinLength(UserProfileInvariants.NameMinLenght)]
-    [MaxLength(UserProfileInvariants.NameMaxLenght)]
     public string Name { get; private set; }
-
-    [Required]
-    [Range(UserProfileInvariants.MinAge, UserProfileInvariants.MaxAge)]
     public int Age { get; private set; }
 
-    public UserProfile(string name, int age)
+#pragma warning disable CS8618 
+    private UserProfile()
     {
+    }
+#pragma warning restore CS8618 
+
+    public Result SetName(string name)
+    {
+        if (string.IsNullOrEmpty(name))
+        {
+            return Result.Failure(DomainErrors.User.UserProfileNameIsNullOrEmpty());
+        }
+
+        if (name.Length is < UserProfileInvariants.NameMinLenght or > UserProfileInvariants.NameMaxLenght)
+        {
+            return Result.Failure(DomainErrors.User.UserProfileNameLenghtOutOfRange(name));
+        }
+
         Name = name;
-        Age = age;
+
+        return Result.Ok();
     }
 
-    public void Update(string name, int age)
+    public Result SetAge(int age)
     {
-        Name = name;
+        if (age is < UserProfileInvariants.MinAge or > UserProfileInvariants.MaxAge)
+        {
+            return Result.Failure(DomainErrors.User.UserProfileInvalidAge(age));
+        }
         Age = age;
+        return Result.Ok();
+    }
+
+    public static Result<UserProfile> Create(string name, int age)
+    {
+        var profile = new UserProfile();
+        Result[] setPropsResults =
+        [
+            profile.SetName(name),
+            profile.SetAge(age)
+        ];
+
+        if (setPropsResults.Any(sr => sr.IsFailure))
+        {
+            return Result<UserProfile>.Combine(profile, setPropsResults);
+        }
+
+        return Result<UserProfile>.Ok(profile);
     }
 }

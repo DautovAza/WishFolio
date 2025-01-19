@@ -1,12 +1,13 @@
 ﻿using Moq;
 using WishFolio.Domain.Abstractions.Repositories;
-using WishFolio.Domain.Entities.UserAgregate;
 using WishFolio.Domain.Abstractions.Auth;
-using WishFolio.Application.Services.Friends;
 using WishFolio.Domain.Entities.UserAgregate.Friends;
 using AutoMapper;
-using WishFolio.Application.Services.Friends.Dtos;
 using Microsoft.Extensions.DependencyInjection;
+using WishFolio.Domain.Entities.UserAgregate;
+using WishFolio.Application.UseCases.Friends.Queries.Dtos;
+using WishFolio.Application.UseCases.Friends.Commands.GetFriends;
+using WishFolio.Domain.Errors;
 
 namespace WishFolio.UnitTests.Application;
 
@@ -40,12 +41,14 @@ public class FriendServiceTests
     [Fact]
     public async Task GetFriends_UserNotFound_ThrowsKeyNotFoundException()
     {
-        var friendService = new FriendService(_userRepositoryMock.Object, _currentUserServiceMock.Object, _mapper);
-
+        var friendService = new GetFriendsQueryHandler(_currentUserServiceMock.Object, _mapper);
         _userRepositoryMock.Setup(r => r.GetByIdAsync(It.IsAny<Guid>()))
                            .ReturnsAsync((User)null);
 
-        await Assert.ThrowsAsync<KeyNotFoundException>(() => friendService.GetFriendsAsync());
+        var result = await friendService.Handle(new GetFriendsQuery(FriendshipStatus.Accepted),default);
+
+        Assert.True(result.IsFailure);
+        Assert.Equal(DomainErrors.User.UserNotFound(), result.Errors.First());
     }
 
     [Fact]
@@ -56,14 +59,14 @@ public class FriendServiceTests
         var friends = CreateFriendsForUser(user, 3);
         var friendsRequests = CreateFriendsRequestsFromUser(user, 2);
 
-        var friendService = new FriendService(_userRepositoryMock.Object, _currentUserServiceMock.Object, _mapper);
+        var friendService = new GetFriendsQueryHandler(_currentUserServiceMock.Object, _mapper);
 
         // Act
-        var friendsResult = await friendService.GetFriendsAsync();
+        var friendsResult = await friendService.Handle(new GetFriendsQuery(FriendshipStatus.Accepted),default);
         //Assert
 
-        Assert.Equal(3, friendsResult.Count());
-        Assert.All(friendsResult, fr => Assert.Equal( FriendshipStatus.Accepted, fr.Status));
+        Assert.Equal(3, friendsResult.Value.Count());
+        Assert.All(friendsResult.Value, fr => Assert.Equal( FriendshipStatus.Accepted, fr.Status));
     } 
     
     [Fact]
@@ -75,14 +78,14 @@ public class FriendServiceTests
         var friendsRequests = CreateFriendsRequestsFromUser(user, 2);
         var friendsExtRequests = CreateExternalFriendsRequestsForUser(user, 4);
 
-        var friendService = new FriendService(_userRepositoryMock.Object, _currentUserServiceMock.Object, _mapper);
+        var friendService = new GetFriendsQueryHandler(_currentUserServiceMock.Object, _mapper);
 
         // Act
-        var friendsResult = await friendService.GetIncommingFriendsInvitations();
+        var friendsResult = await friendService.Handle(new GetFriendsQuery(FriendshipStatus.Requested),default);
         //Assert
 
-        Assert.Equal(friendsExtRequests.Count(), friendsResult.Count());
-        Assert.All(friendsResult, fr => Assert.Equal( FriendshipStatus.Requested, fr.Status));
+        Assert.Equal(friendsExtRequests.Count(), friendsResult.Value.Count());
+        Assert.All(friendsResult.Value, fr => Assert.Equal( FriendshipStatus.Requested, fr.Status));
     }    
 
     [Fact]
@@ -94,24 +97,26 @@ public class FriendServiceTests
         var friendsRequests = CreateFriendsRequestsFromUser(user, 2);
         var friendsExtRequests = CreateExternalFriendsRequestsForUser(user, 4);
 
-        var friendService = new FriendService(_userRepositoryMock.Object, _currentUserServiceMock.Object, _mapper);
+        var friendService = new GetFriendsQueryHandler(_currentUserServiceMock.Object, _mapper);
 
         // Act
-        var friendsResult = await friendService.GetSentFriendsInvitations();
+        var friendsResult = await friendService.Handle(new GetFriendsQuery(FriendshipStatus.Pending),default);
         //Assert
 
-        Assert.Equal(friendsRequests.Count(), friendsResult.Count());
-        Assert.All(friendsResult, fr => Assert.Equal( FriendshipStatus.Pending, fr.Status));
+        Assert.Equal(friendsRequests.Count(), friendsResult.Value.Count());
+        Assert.All(friendsResult.Value, fr => Assert.Equal( FriendshipStatus.Pending, fr.Status));
     }
 
     private User CreateUser()
     {
-        var user = new User("test@example.com", "Test User", 45);
-        user.SetPassword("Password", _passwordHasherMoq.Object);
+        User user = User.Create ("test@example.com", "Test User", 45,"Password", _passwordHasherMoq.Object).Value;
         SetupRepositoryForUser(user);
 
         _currentUserServiceMock.Setup(s => s.GetCurrentUserId())
-            .Returns(user.Id);
+            .Returns(user.Id);   
+        
+        _currentUserServiceMock.Setup(s => s.GetCurrentUserAsync())
+            .ReturnsAsync(user);
 
         return user;
     }
@@ -122,11 +127,11 @@ public class FriendServiceTests
             .Range(0, count)
             .Select(i =>
             {
-                User friend = new User($"testFriend{i + 1}@example.com", $"Test friend {i + 1}", 45);
+                User friend = User.Create($"testFriend{i + 1}@example.com", $"Test friend {i + 1}", 45, "Password", _passwordHasherMoq.Object);
 
                 SetupRepositoryForUser(friend);
 
-                user.AddFriend(friend);
+                user.AddToFriends(friend);
                 friend.AcceptFriendRequest(user);
                 return friend;
             })
@@ -139,11 +144,11 @@ public class FriendServiceTests
             .Range(0, count)
             .Select(i =>
             {
-                User friend = new User($"testFriendRequest{i + 1}@example.com", $"Test friend request {i + 1}", 45);
+                User friend = User.Create($"testFriendRequest{i + 1}@example.com", $"Test friend request {i + 1}", 45, "Password", _passwordHasherMoq.Object);
 
                 SetupRepositoryForUser(friend);
 
-                user.AddFriend(friend);
+                user.AddToFriends(friend);
                 return friend;
             })
             .ToArray();
@@ -155,11 +160,11 @@ public class FriendServiceTests
             .Range(0, count)
             .Select(i =>
             {
-                User friend = new User($"testFriendRequest{i + 1}@example.com", $"Test friend request {i + 1}", 45);
+                User friend = User.Create ($"testFriendRequest{i + 1}@example.com", $"Test friend request {i + 1}", 45, "Password", _passwordHasherMoq.Object);
 
                 SetupRepositoryForUser(friend);
 
-                friend.AddFriend(user);
+                friend.AddToFriends(user);
                 return friend;
             })
             .ToArray();

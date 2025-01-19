@@ -1,19 +1,28 @@
-﻿using WishFolio.Domain.Entities.UserAgregate;
+﻿using Moq;
+using WishFolio.Domain.Abstractions.Auth;
+using WishFolio.Domain.Entities.UserAgregate;
 using WishFolio.Domain.Entities.UserAgregate.Friends;
 
 namespace WishFolio.UnitTests.Domain;
 
 public class UserTests_Friends
 {
+    private Mock<IPasswordHasher> _passwordHasherMoq;
+
+    public UserTests_Friends()
+    {
+        _passwordHasherMoq = new Mock<IPasswordHasher>();
+    }
+
     [Fact]
     public void AddFriend_ShouldAddFriendship()
     {
         // Arrange
-        var user1 = new User("user1@example.com", "Tester1", 40);
-        var user2 = new User("user2@example.com", "Tester2", 40);
+        User user1 = User.Create("user1@example.com", "Tester1", 40,"Password",_passwordHasherMoq.Object);
+        User user2 =  User.Create("user2@example.com", "Tester2", 40, "Password", _passwordHasherMoq.Object);
 
         // Act
-        user1.AddFriend(user2);
+        user1.AddToFriends(user2);
 
         // Assert
         Assert.Single(user1.Friends);
@@ -26,9 +35,9 @@ public class UserTests_Friends
     public void AcceptFriendRequest_ShouldChangeStatusToAccepted()
     {
         // Arrange
-        var user1 = new User("user1@example.com", "Tester1", 40);
-        var user2 = new User("user2@example.com", "Tester2", 40);
-        user1.AddFriend(user2);
+        User user1 = User.Create("user1@example.com", "Tester1", 40, "Password", _passwordHasherMoq.Object);
+        User user2 = User.Create("user2@example.com", "Tester2", 40, "Password", _passwordHasherMoq.Object);
+        user1.AddToFriends(user2);
 
         // Act
         user2.AcceptFriendRequest(user1);
@@ -42,9 +51,9 @@ public class UserTests_Friends
     public void DeslineFriendRequest_ShouldChangeStatusToDeslined()
     {
         // Arrange
-        var user1 = new User("user1@example.com", "Tester1", 40);
-        var user2 = new User("user2@example.com", "Tester2", 40);
-        user1.AddFriend(user2);
+        User user1 = User.Create("user1@example.com", "Tester1", 40, "Password", _passwordHasherMoq.Object);
+        User user2 = User.Create("user2@example.com", "Tester2", 40, "Password", _passwordHasherMoq.Object);
+        user1.AddToFriends(user2);
 
         // Act
         user2.RemoveFriend(user1);
@@ -58,9 +67,9 @@ public class UserTests_Friends
     public void RemoveFriendRequest_ShouldChangeStatusToDeslined()
     {
         // Arrange
-        var user1 = new User("user1@example.com", "Tester1", 40);
-        var user2 = new User("user2@example.com", "Tester2", 40);
-        user1.AddFriend(user2);
+        User user1 = User.Create("user1@example.com", "Tester1", 40, "Password", _passwordHasherMoq.Object);
+        User user2 = User.Create("user2@example.com", "Tester2", 40, "Password", _passwordHasherMoq.Object);
+        user1.AddToFriends(user2);
         user2.AcceptFriendRequest(user1);
         
         // Act

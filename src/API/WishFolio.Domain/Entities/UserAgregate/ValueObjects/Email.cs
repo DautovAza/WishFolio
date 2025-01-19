@@ -1,5 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using WishFolio.Domain.Abstractions.Entities;
+using WishFolio.Domain.Errors;
+using WishFolio.Domain.Shared.ResultPattern;
 
 namespace WishFolio.Domain.Entities.UserAgregate.ValueObjects
 {
@@ -9,18 +11,28 @@ namespace WishFolio.Domain.Entities.UserAgregate.ValueObjects
 
         public string Address { get; }
 
-        public Email(string address)
+        private Email(string address)
         {
-            if (string.IsNullOrEmpty(address) || !_emailRegex.IsMatch(address))
-            {
-                throw new ArgumentException("Неверный формат email.");
-            }
             Address = address;
         }
 
         protected override IEnumerable<object> GetEqualityComponents()
         {
             yield return Address;
+        }
+
+        public static Result<Email> Create(string address)
+        {
+            if (string.IsNullOrEmpty(address))
+            {
+                return Result<Email>.Failure(DomainErrors.User.EmailIsNull());
+            }
+
+            if (!_emailRegex.IsMatch(address))
+            {
+                return Result<Email>.Failure(DomainErrors.User.EmailInvalidFormat(address));
+            }
+            return Result<Email>.Ok(new Email(address));
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using WishFolio.Application.Services.Wishlists;
+using WishFolio.Application.UseCases.Wishlists;
 
 namespace WishFolio.WebApi.Controllers.WishLists;
 

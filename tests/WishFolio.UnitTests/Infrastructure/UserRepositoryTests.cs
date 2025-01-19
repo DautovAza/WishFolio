@@ -25,12 +25,12 @@ public class UserRepositoryTests
         using var context = GetInMemoryDbContext();
         var repository = new UserRepository(context);
 
-        var email = new Email("test@example.com");
-        var user = new User(email.Address, "Test User", 25);
-        user.SetPassword("Password", _passwordHasherMoq.Object);
+        Email email = Email.Create("test@example.com").Value;
+        User user = User.Create(email.Address, "Test User", 25, "Password", _passwordHasherMoq.Object);
+
 
         await repository.AddAsync(user);
-        await repository.SaveChangesAsync();
+        await context.SaveChangesAsync();
 
         var retrievedUser = await repository.GetByIdAsync(user.Id);
         Assert.NotNull(retrievedUser);
@@ -45,19 +45,17 @@ public class UserRepositoryTests
         using var context = GetInMemoryDbContext();
         var repository = new UserRepository(context);
 
-        var email1 = new Email("user1@example.com");
-        var user1 = new User(email1.Address, "User One", 30);
-        user1.SetPassword("Password", _passwordHasherMoq.Object);
+        Email email1 = Email.Create("user1@example.com");
+        User user1 = User.Create(email1.Address, "User One", 30, "Password", _passwordHasherMoq.Object).Value;
 
-        var email2 = new Email("user2@example.com");
-        var user2 = new User(email2.Address, "User Two", 28);
-        user2.SetPassword("Password", _passwordHasherMoq.Object);
+        Email email2 = Email.Create("user2@example.com");
+        User user2 = User.Create(email2.Address, "User Two", 28,"Password", _passwordHasherMoq.Object);
 
         await repository.AddAsync(user1);
         await repository.AddAsync(user2);
-        await repository.SaveChangesAsync();
+        await context.SaveChangesAsync();
 
-        var retrievedUser = await repository.GetByEmailAsync(new Email("user2@example.com"));
+        var retrievedUser = await repository.GetByEmailAsync(Email.Create("user2@example.com").Value.Address);
         Assert.NotNull(retrievedUser);
         Assert.Equal("User Two", retrievedUser.Profile.Name);
     }

@@ -10,5 +10,4 @@ public interface IWishListRepository
     Task<WishList?> GetOwnerWishListByNameAsync(Guid userId, string name, VisabilityLevel visabilityLevel);
     Task<WishlistItem?> GetWishListItemByIdAsync(Guid itemId);
     Task RemoveAsync(WishList wishlist);
-    Task SaveChangesAsync();
 }

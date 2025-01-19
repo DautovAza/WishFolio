@@ -1,32 +1,31 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WishFolio.Application.Services.UserProfile.Commands;
-using WishFolio.Application.Services.UserProfile.Queries;
+using WishFolio.Application.UseCases.UserProfile.Queries.Dtos;
+using WishFolio.Application.UseCases.UserProfile.Queries.GetProfile;
+using WishFolio.Application.UseCases.UserProfile.Commands.UpdateProfile;
+using WishFolio.WebApi.Controllers.Abstractions;
 
 namespace WishFolio.WebApi.Controllers.UserProfile;
 
 [Authorize]
 [ApiController]
 [Route("api/[controller]")]
-public class ProfileController : ControllerBase
+public class ProfileController : ResultHandlerControllerBase
 {
-    private readonly ISender _sender;
-
-    public ProfileController(ISender sender) =>
-        _sender = sender;
+    public ProfileController(ISender sender) :
+        base(sender)
+    { }
 
     [HttpGet]
-    public async Task<IActionResult> GetProfile()
+    public Task<ActionResult<GetProfileResponse>> GetProfile()
     {
-        var profile = await _sender.Send(new GetProfileQuery());
-        return Ok(profile);
+        return HandleResultResponseForRequest(new GetProfileQuery());
     }
 
     [HttpPut]
-    public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileCommand request)
+    public Task<ActionResult> UpdateProfile([FromBody] UpdateProfileCommand request)
     {
-        await _sender.Send(request);
-        return Ok();
+        return HandleResultResponseForRequest(request);
     }
 }

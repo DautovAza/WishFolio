@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WishFolio.Domain.Entities.UserAgregate;
-using WishFolio.Domain.Entities.UserAgregate.ValueObjects;
 using WishFolio.Domain.Abstractions.Repositories;
 using WishFolio.Domain.Entities.UserAgregate.Profile;
+using WishFolio.Domain.Entities.UserAgregate;
 
 namespace WishFolio.Infrastructure.Dal.Repositories;
 
@@ -15,7 +14,7 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
-    public async Task<User> GetByEmailAsync(Email email)
+    public async Task<User> GetByEmailAsync(string email)
     {
         if (email == null)
         {
@@ -26,7 +25,7 @@ public class UserRepository : IUserRepository
             .Include(u => u.Profile)
             .Include(u => u.Friends)
             .Include(u => u.Notifications)
-            .FirstOrDefaultAsync(u => u.Email.Address == email.Address);
+            .FirstOrDefaultAsync(u => u.Email.Address == email);
     }
 
     public async Task<User> GetByIdAsync(Guid id)
@@ -46,11 +45,6 @@ public class UserRepository : IUserRepository
         }
 
         await _context.Users.AddAsync(user);
-    }
-
-    public async Task SaveChangesAsync()
-    {
-        await _context.SaveChangesAsync();
     }
 
     public async Task<UserProfile> GetProfileByIdAsync(Guid id)

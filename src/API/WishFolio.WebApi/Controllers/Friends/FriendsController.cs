@@ -1,39 +1,33 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WishFolio.Application.Services.Friends.Dtos;
-using WishFolio.Application.Services.Friends;
 using Microsoft.AspNetCore.Authorization;
+using MediatR;
+using WishFolio.Domain.Entities.UserAgregate.Friends;
+using WishFolio.Application.UseCases.Friends.Queries.Dtos;
+using WishFolio.Application.UseCases.Friends.Commands.DeleteFriend;
+using WishFolio.Application.UseCases.Friends.Commands.GetFriends;
+using WishFolio.WebApi.Controllers.Abstractions;
 
 namespace WishFolio.WebApi.Controllers.Friends;
 
 [Authorize]
 [ApiController]
 [Route("api/[controller]")]
-public class FriendsController : ControllerBase
+public class FriendsController : ResultHandlerControllerBase
 {
-    private readonly IFriendService _friendService;
 
-    public FriendsController(IFriendService friendService)
-    {
-        _friendService = friendService;
-    }
+    public FriendsController(ISender sender)
+        : base(sender)
+    { }
 
-    [HttpPost("{friendId}")]
-    public async Task<IActionResult> AddFriend(Guid friendId)
+    [HttpGet]
+    public async Task<ActionResult<List<FriendDto>>> GetFriends()
     {
-        await _friendService.AddFriendAsync(friendId);
-        return Ok();
+        return await HandleResultResponseForRequest(new GetFriendsQuery(FriendshipStatus.Accepted));
     }
 
     [HttpDelete("{friendId}")]
-    public async Task<IActionResult> RemoveFriend(Guid friendId)
+    public async Task<ActionResult> RemoveFriend(Guid friendId)
     {
-        await _friendService.RemoveFriendAsync(friendId);
-        return NoContent();
-    }
-
-    [HttpGet]
-    public async Task<IEnumerable<FriendDto>> GetFriends()
-    {
-        return await _friendService.GetFriendsAsync();
+        return await HandleResultResponseForRequest(new RemoveFriendCommand() { FriendId = friendId });
     }
 }

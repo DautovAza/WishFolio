@@ -1,4 +1,7 @@
-﻿namespace WishFolio.Domain.Entities.UserAgregate.Friends;
+﻿using WishFolio.Domain.Errors;
+using WishFolio.Domain.Shared.ResultPattern;
+
+namespace WishFolio.Domain.Entities.UserAgregate.Friends;
 
 public class Friendship
 {
@@ -7,7 +10,9 @@ public class Friendship
     public DateTime CreatedAt { get; private set; }
     public FriendshipStatus Status { get; private set; }
 
-    public Friendship(Guid userId, Guid friendId)
+    private Friendship() { }
+
+    private Friendship(Guid userId, Guid friendId)
     {
         UserId = userId;
         FriendId = friendId;
@@ -15,24 +20,26 @@ public class Friendship
         Status = FriendshipStatus.Pending;
     }
 
-    public void Accept()
+    public Result Accept()
     {
         if (Status < FriendshipStatus.Pending || Status > FriendshipStatus.Requested)
         {
-            throw new InvalidOperationException("Нельзя подтвердить несуществующий запрос.");
+            return Result.Failure(DomainErrors.Friend.FriendRequestNotFound());
         }
 
         Status = FriendshipStatus.Accepted;
+        return Result.Ok();
     }
 
-    public void Decline()
+    public Result Decline()
     {
         if (Status == FriendshipStatus.Declined)
         {
-            throw new InvalidOperationException("Нельзя отклонить несуществующий запрос.");
+            return Result.Failure(DomainErrors.Friend.FriendRequestNotFound());
         }
 
         Status = FriendshipStatus.Declined;
+        return Result.Ok();
     }
 
     public static Friendship CreateFriendshipRequest(Guid userId, Guid friendId)
@@ -40,6 +47,14 @@ public class Friendship
         return new Friendship(userId, friendId)
         {
             Status = FriendshipStatus.Requested,
+        };
+    }  
+    
+    public static Friendship CreateFriendshipSent(Guid userId, Guid friendId)
+    {
+        return new Friendship(userId, friendId)
+        {
+            Status = FriendshipStatus.Pending,
         };
     }
 }

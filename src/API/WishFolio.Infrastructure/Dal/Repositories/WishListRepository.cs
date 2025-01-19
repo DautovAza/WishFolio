@@ -1,7 +1,5 @@
-﻿using System.Xml.Linq;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using WishFolio.Domain.Abstractions.Repositories;
-using WishFolio.Domain.Entities.UserAgregate;
 using WishFolio.Domain.Entities.WishListAgregate;
 
 namespace WishFolio.Infrastructure.Dal.Repositories;
@@ -53,10 +51,5 @@ public class WishListRepository : IWishListRepository
         wishlist = await _context.WishLists.FirstOrDefaultAsync(wl => wl.Id == wishlist.Id);
         _context.WishLists.Remove(wishlist);
         await Task.CompletedTask;
-    }
-
-    public async Task SaveChangesAsync()
-    {
-        await _context.SaveChangesAsync();
     }
 }
