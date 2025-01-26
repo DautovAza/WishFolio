@@ -1,6 +1,6 @@
 ﻿using WishFolio.Domain.Entities.WishListAgregate;
 
-namespace WishFolio.Application.UseCases.Wishlists.Dtos;
+namespace WishFolio.Application.UseCases.Wishlists.Queries.Dtos;
 
 public record WishListDto
 {

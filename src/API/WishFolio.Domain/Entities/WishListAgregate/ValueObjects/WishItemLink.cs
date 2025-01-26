@@ -1,32 +1,40 @@
 ﻿using WishFolio.Domain.Abstractions.Entities;
+using WishFolio.Domain.Errors;
+using WishFolio.Domain.Shared.ResultPattern;
 
-namespace WishFolio.Domain.Entities.WishListAgregate.ValueObjects
+namespace WishFolio.Domain.Entities.WishListAgregate.ValueObjects;
+
+public sealed class WishItemLink : ValueObject
 {
-    public class WishItemLink : ValueObject
+    public string Uri { get; private set; }
+
+    private WishItemLink(string uri)
     {
-        public string Uri { get; private set; }
+        Uri = uri;
+    }
 
-        public WishItemLink(string uri)
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return Uri;
+    }
+
+    public override string ToString() =>
+        Uri;
+
+    public static Result<WishItemLink> Create(string uri)
+    {
+        if (string.IsNullOrWhiteSpace(uri))
         {
-            if (string.IsNullOrWhiteSpace(uri))
-            {
-                throw new ArgumentException("URL не может быть пустым.");
-            }
-
-            if (!System.Uri.IsWellFormedUriString(uri, UriKind.Absolute))
-            {
-                throw new ArgumentException("Неверный формат URL.");
-            }
-
-            Uri = uri;
+            return Result<WishItemLink>.Failure(DomainErrors.WishListItem.WishItemLinkIsNullOrEmpty());
         }
 
-        protected override IEnumerable<object> GetEqualityComponents()
+        if (!System.Uri.IsWellFormedUriString(uri, UriKind.Absolute))
         {
-            yield return Uri;
+            return Result<WishItemLink>.Failure(DomainErrors.WishListItem.WishItemLinkInvalidFormat(uri));
         }
 
-        public override string ToString() => 
-            Uri;
+        var link = new WishItemLink(uri);
+
+        return Result<WishItemLink>.Ok(link);
     }
 }

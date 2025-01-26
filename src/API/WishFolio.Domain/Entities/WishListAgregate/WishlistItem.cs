@@ -1,93 +1,134 @@
-﻿using System.ComponentModel.DataAnnotations;
-using WishFolio.Domain.Abstractions.Entities;
+﻿using WishFolio.Domain.Abstractions.Entities;
 using WishFolio.Domain.Entities.UserAgregate;
 using WishFolio.Domain.Entities.WishListAgregate.ValueObjects;
+using WishFolio.Domain.Errors;
+using WishFolio.Domain.Shared.ResultPattern;
 
 namespace WishFolio.Domain.Entities.WishListAgregate;
 
 public class WishlistItem : AuditableEntity
 {
-    [Required]
     public Guid Id { get; private set; }
-
-    [Required]
-    [MinLength(WishlistItemInvariants.NameMinLength)]
-    [MaxLength(WishlistItemInvariants.NameMaxLength)]
     public string Name { get; private set; }
-
-    [MaxLength(WishlistItemInvariants.DescriptionMaxLength)]
     public string Description { get; private set; }
-
-    public WishItemLink Link { get; private set; }
+    public WishItemLink? Link { get; private set; }
 
     public Guid? ReservationUserId { get; private set; }
     public ReservationStatus ReservationStatus { get; private set; }
 
     private WishlistItem() : base() { }
 
-    public WishlistItem(string name, string description, string uri)
+    private WishlistItem(Guid id)
     {
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            throw new ArgumentException("Название элемента не может быть пустым.");
-        }
-
-        Id = Guid.NewGuid();
-        Name = name;
-        Description = description;
-        Link = new WishItemLink(uri);
+        Id = id;
     }
 
-    public void Update(string name, string description, string link)
+    public Result Update(string name, string description, string link)
     {
         if (ReservationStatus != ReservationStatus.Available)
         {
             throw new Exception("Нельзя изменить параметры, т.к. это объект забронирован другим пользователем!");
         }
 
-        if (!string.IsNullOrWhiteSpace(name))
-        {
-            Name = name;
-        }
-        if (description != null)
-        {
-            Description = description;
-        }
-        if (!string.IsNullOrWhiteSpace(link))
-        {
-            Link = new WishItemLink(link);
-        }
+        return Result.Combine(SetName(name),
+            SetDescription(description),
+            SetLink(link));
     }
 
-    public void ReserveItem(User user, bool isAnonymous)
+    private Result SetLink(string uri)
+    {
+        var createLinkResult = WishItemLink.Create(uri);
+
+        if (createLinkResult.IsSuccess)
+        {
+            Link = Link;
+        }
+
+        return createLinkResult;
+    }
+
+    public Result ReserveItem(User user, bool isAnonymous)
     {
         if (ReservationStatus != ReservationStatus.Available)
         {
-            throw new Exception("Нельзя забронирован, т.к. это объект забронирован другим пользователем!");
+            return Result.Failure(DomainErrors.WishListItem.ItemAlreadyReserved(Name));
         }
 
         ReservationStatus = isAnonymous ? ReservationStatus.ReservedAnonymous : ReservationStatus.Reserved;
         ReservationUserId = user.Id;
+
+        return Result.Ok();
     }
 
-    public void CancelReservation(User user)
+    public Result CancelReservation(User user)
     {
         if (ReservationStatus != ReservationStatus.Reserved || user.Id != ReservationUserId)
         {
-            throw new Exception("Нельзя снять бронь, т.к. это объект зарезервирован другим пользователем!");
+            return Result.Failure(DomainErrors.WishListItem.ItemAlreadyReservedByOtherUser(Name));
         }
 
         ReservationStatus = ReservationStatus.Available;
         ReservationUserId = user.Id;
+
+        return Result.Ok();
     }
 
-    public void CloseReservation(User user)
+    public Result CloseReservation(User user)
     {
         if (ReservationStatus != ReservationStatus.Reserved || user.Id != ReservationUserId)
         {
-            throw new Exception("Нельзя подтверддить бронь, т.к. это объект зарезервирован другим пользователем!");
+            return Result.Failure(DomainErrors.WishListItem.ItemAlreadyReservedByOtherUser(Name));
         }
 
         ReservationStatus = ReservationStatus.Clsoed;
+
+        return Result.Ok();
+    }
+
+    private Result SetName(string name)
+    {
+        if (string.IsNullOrEmpty(name))
+        {
+            return Result.Failure(DomainErrors.WishListItem.NameIsNullOrEmpty());
+        }
+
+        if (name.Length > WishlistItemInvariants.NameMaxLength)
+        {
+            return Result.Failure(DomainErrors.WishListItem.NameIsToLong(name));
+        }
+
+        if (name.Length < WishlistItemInvariants.NameMinLength)
+        {
+            return Result.Failure(DomainErrors.WishListItem.NameIsToShort(name));
+        }
+
+        Name = name;
+
+        return Result.Ok();
+    }
+
+    private Result SetDescription(string description)
+    {
+        if (description is null)
+        {
+            return Result.Failure(DomainErrors.WishListItem.DescriptionIsNull());
+        }
+
+        if (description.Length > WishlistItemInvariants.DescriptionMaxLength)
+        {
+            return Result.Failure(DomainErrors.WishListItem.DescriptionIsToLong());
+        }
+
+        Description = description;
+
+        return Result.Ok();
+    }
+
+    public static Result<WishlistItem> Create(string name, string description, string link)
+    {
+        var item = new WishlistItem(Guid.NewGuid());
+        var result = item.Update(name, description, link);
+
+        return Result<WishlistItem>.Combine(item, result);
     }
 }

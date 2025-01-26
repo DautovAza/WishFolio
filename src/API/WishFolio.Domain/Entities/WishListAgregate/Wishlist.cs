@@ -1,4 +1,8 @@
-﻿namespace WishFolio.Domain.Entities.WishListAgregate;
+﻿using WishFolio.Domain.Abstractions.Repositories;
+using WishFolio.Domain.Errors;
+using WishFolio.Domain.Shared.ResultPattern;
+
+namespace WishFolio.Domain.Entities.WishListAgregate;
 
 public class WishList
 {
@@ -13,58 +17,95 @@ public class WishList
 
     private WishList() { }
 
-    public WishList(Guid ownerId, string name, string description, VisabilityLevel visibility, bool isUniqNameForUser)
+    private WishList(Guid ownerId)
     {
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            throw new ArgumentException("Название списока желаний не может быть пустым.");
-        }
-
-        if (!isUniqNameForUser)
-        {
-            throw new Exception("Имя виш-листа уже существует для данного пользователя");
-        }
-
         Id = Guid.NewGuid();
         OwnerId = ownerId;
-        Name = name;
-        Description = description;
-        Visibility = visibility;
         _items = new List<WishlistItem>();
     }
 
-    public void Update(string name, string description, VisabilityLevel visibility)
+    public Result Update(string name, string description, VisabilityLevel visibility)
     {
-        if (!string.IsNullOrWhiteSpace(name))
-        {
-            Name = name;
-        }
-        if (description != null)
-        {
-            Description = description;
-        }
-
-        Visibility = visibility;
+        return Result.Combine(SetName(name),
+            SetDescription(description),
+            SetVisability(visibility));
     }
 
-    public void AddItem(WishlistItem item)
+    public Result AddItem(WishlistItem item)
     {
         if (_items.Any(i => i.Id == item.Id))
         {
-            throw new InvalidOperationException("Элемент уже добавлен в список желаний.");
+            return Result.Failure(DomainErrors.WishListItem.ItemAlreadyExisted(item.Id));
         }
 
         _items.Add(item);
+        return Result.Ok();
     }
 
-    public void RemoveItem(Guid itemId)
+    public Result RemoveItem(Guid itemId)
     {
         var item = _items.FirstOrDefault(i => i.Id == itemId);
         if (item == null)
         {
-            throw new KeyNotFoundException("Элемент не найден в списке желаний.");
+            return Result.Failure(DomainErrors.WishListItem.ItemNotFound(itemId));
+        }
+        _items.Remove(item);
+        return Result.Ok();
+    }
+
+    private Result SetVisability(VisabilityLevel visibility)
+    {
+        Visibility = visibility;
+        return Result.Ok();
+    }
+
+    private Result SetDescription(string description)
+    {
+        if (description == null)
+        {
+            return Result.Failure(DomainErrors.WishList.DescriptionIsNull());
         }
 
-        _items.Remove(item);
+        if (description.Length > WishlistInvariants.DescriptionMaxLength)
+        {
+            return Result.Failure(DomainErrors.WishList.DescriptionIsToLong());
+        }
+
+        Description = description;
+        return Result.Ok();
+    }
+
+    private Result SetName(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            return Result.Failure(DomainErrors.WishList.NameIsNullOrEmpty());
+        }
+        if (name.Length > WishlistInvariants.NameMaxLength)
+        {
+            return Result.Failure(DomainErrors.WishList.NameIsToLong(name));
+        }
+
+
+        Name = name;
+
+        return Result.Ok();
+    }
+
+    public static async Task<Result<WishList>> CreateAsync(Guid userId,
+        string name,
+        string description,
+        VisabilityLevel visabilityLevel,
+        IWishListRepository wishListRepository)
+    {
+        if (!await wishListRepository.IsUniqWishListNameForUser(name, userId))
+        {
+            return Result<WishList>.Failure(DomainErrors.WishList.WishListWithSameNameAlreadyExisted(name));
+        }
+        var wishList = new WishList(userId);
+
+        return Result<WishList>.Combine(wishList, wishList.SetName(name),
+            wishList.SetDescription(description),
+            wishList.SetVisability(visabilityLevel));
     }
 }

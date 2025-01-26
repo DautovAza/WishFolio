@@ -1,37 +1,38 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using WishFolio.Application.UseCases.Wishlists;
+using MediatR;
+using WishFolio.WebApi.Controllers.Abstractions;
+using WishFolio.Application.UseCases.WishListItemsReservations.Commands.ReserveItem;
+using WishFolio.Application.UseCases.WishListItemsReservations.Commands.AcceptReservation;
+using WishFolio.Application.UseCases.WishListItemsReservations.Commands.CancelReservation;
 
 namespace WishFolio.WebApi.Controllers.WishLists;
 
 [Authorize]
 [ApiController]
 [Route("api/{userId:guid}/WishLists/{wishListName}/{itemId:guid}/[controller]")]
-public class ReservationController : ControllerBase
+public class ReservationController : ResultHandlerControllerBase
 {
-    private readonly IWishListItemReservationService _wishListsService;
-
-    public ReservationController(IWishListItemReservationService wishListsService) => 
-        _wishListsService = wishListsService;
+    public ReservationController(ISender sender)
+        : base(sender)
+    {
+    }
 
     [HttpPost]
-    public async Task<IActionResult> ReserveItem([FromRoute] Guid itemId, [FromQuery] bool isAnonymous=false)
+    public async Task<IActionResult> ReserveItem([FromRoute] Guid itemId, [FromQuery] bool isAnonymous = false)
     {
-        await _wishListsService.ReserveItem(itemId,isAnonymous);
-        return Ok();
+        return await HandleResultResponseForRequest(new ReserveItemCommand(itemId, isAnonymous));
     }
 
     [HttpPut]
     public async Task<IActionResult> AcceptReservation([FromRoute] Guid itemId)
     {
-        await _wishListsService.AcceptReservation(itemId);
-        return Ok();
+        return await HandleResultResponseForRequest(new AcceptReservationItemCommand(itemId));
     }
 
     [HttpDelete]
     public async Task<IActionResult> CancelReservation([FromQuery] Guid itemId)
     {
-        await _wishListsService.CancelReservation(itemId);
-        return Ok();
+        return await HandleResultResponseForRequest(new CancelReservationItemCommand(itemId));
     }
 }

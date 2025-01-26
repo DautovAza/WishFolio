@@ -29,8 +29,7 @@ public  class Result : IResult
     public static Result Failure(Error error) =>
         new(false, [error]);
 
-
-    public static Result Combine(IEnumerable<IResult> results)
+    public static Result Combine(params IResult[] results)
     {
         if (results.Any(e => e.IsFailure))
         {
@@ -60,7 +59,7 @@ public sealed class Result<T> : Result
     public new static Result<T> Failure(Error error) =>
         new(null, false, [error]);
 
-    public static Result<T> Combine(T value, IEnumerable<IResult> results)
+    public static Result<T> Combine(T value, params IResult[] results)
     {
         if (results.Any(e => e.IsFailure))
         {
