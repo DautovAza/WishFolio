@@ -12,8 +12,8 @@ using WishFolio.Infrastructure.Dal.Write;
 namespace WishFolio.Infrastructure.Migrations
 {
     [DbContext(typeof(WishFolioContext))]
-    [Migration("20250119165241_CQRS_Integration")]
-    partial class CQRS_Integration
+    [Migration("20250208132520_UpdateProfilePropertyName")]
+    partial class UpdateProfilePropertyName
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -181,11 +181,13 @@ namespace WishFolio.Infrastructure.Migrations
                                 .HasColumnType("uuid");
 
                             b1.Property<int>("Age")
-                                .HasColumnType("integer");
+                                .HasColumnType("integer")
+                                .HasColumnName("Age");
 
                             b1.Property<string>("Name")
                                 .IsRequired()
-                                .HasColumnType("text");
+                                .HasColumnType("text")
+                                .HasColumnName("Name");
 
                             b1.HasKey("UserId");
 
@@ -245,8 +247,7 @@ namespace WishFolio.Infrastructure.Migrations
                                 .HasForeignKey("WishlistItemId");
                         });
 
-                    b.Navigation("Link")
-                        .IsRequired();
+                    b.Navigation("Link");
                 });
 
             modelBuilder.Entity("WishFolio.Domain.Entities.UserAgregate.User", b =>

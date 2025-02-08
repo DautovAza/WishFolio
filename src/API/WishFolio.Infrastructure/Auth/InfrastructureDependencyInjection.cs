@@ -3,11 +3,11 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using WishFolio.Domain.Abstractions.Repositories;
 using WishFolio.Application.UseCases.Accounts;
-using WishFolio.Infrastructure.Dal.Repositories;
 using WishFolio.Domain.Abstractions.Auth;
-using WishFolio.Infrastructure.Dal;
+using WishFolio.Domain.Abstractions.Repositories.Write;
+using WishFolio.Infrastructure.Dal.Write;
+using WishFolio.Infrastructure.Dal.Write.Repositories;
 
 namespace WishFolio.Infrastructure.Auth;
 

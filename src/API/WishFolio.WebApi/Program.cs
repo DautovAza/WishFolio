@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using WishFolio.Application.DI;
-using WishFolio.Infrastructure.Dal;
 using WishFolio.Infrastructure.Auth;
 using WishFolio.Infrastructure.CORS;
 using WishFolio.Infrastructure.Swagger;
+using WishFolio.Infrastructure.Dal.Write;
+using WishFolio.Infrastructure.DAL.Read;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +24,8 @@ builder.Services.AddApplicationServices()
     .AddDbContext<WishFolioContext>(options =>
     {
         options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreConnection"));
-    });
+    })
+    .AddReadRepositoriesWithDapper(builder.Configuration);
 
 var app = builder.Build();
 
@@ -34,7 +36,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger()
        .UseSwaggerUI();
 }
-
 app.UseAuthentication()
    .UseAuthorization()
    .ConfigureCors();

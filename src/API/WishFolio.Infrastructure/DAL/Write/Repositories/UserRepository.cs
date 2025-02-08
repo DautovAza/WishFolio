@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WishFolio.Domain.Abstractions.Repositories;
 using WishFolio.Domain.Entities.UserAgregate.Profile;
 using WishFolio.Domain.Entities.UserAgregate;
+using WishFolio.Domain.Abstractions.Repositories.Write;
+using WishFolio.Infrastructure.Dal.Write;
 
-namespace WishFolio.Infrastructure.Dal.Repositories;
+namespace WishFolio.Infrastructure.Dal.Write.Repositories;
 
 public class UserRepository : IUserRepository
 {

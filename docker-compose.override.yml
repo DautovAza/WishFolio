@@ -9,3 +9,6 @@ services:
       - "8080"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+  db:
+    ports:
+      - "2218:5432"

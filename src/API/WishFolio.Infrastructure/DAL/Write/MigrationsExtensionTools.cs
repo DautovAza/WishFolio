@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace WishFolio.Infrastructure.Dal;
+namespace WishFolio.Infrastructure.Dal.Write;
 
 public static class MigrationsExtensionTools
 {

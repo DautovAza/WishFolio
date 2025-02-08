@@ -1,7 +1,7 @@
 ﻿using Moq;
 using WishFolio.Application.UseCases.Accounts;
 using WishFolio.Domain.Abstractions.Auth;
-using WishFolio.Domain.Abstractions.Repositories;
+using WishFolio.Domain.Abstractions.Repositories.Write;
 using WishFolio.Domain.Entities.UserAgregate;
 using WishFolio.Domain.Errors;
 

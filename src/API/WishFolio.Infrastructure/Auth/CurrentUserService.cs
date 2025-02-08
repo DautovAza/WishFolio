@@ -1,8 +1,8 @@
 ﻿using WishFolio.Domain.Abstractions.Auth;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
-using WishFolio.Domain.Abstractions.Repositories;
 using WishFolio.Domain.Entities.UserAgregate;
+using WishFolio.Domain.Abstractions.Repositories.Write;
 
 namespace WishFolio.Infrastructure.Auth;
 

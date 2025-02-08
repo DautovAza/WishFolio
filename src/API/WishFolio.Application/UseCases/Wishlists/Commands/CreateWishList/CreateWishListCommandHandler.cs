@@ -1,6 +1,6 @@
 ﻿using WishFolio.Application.Common;
 using WishFolio.Domain.Abstractions.Auth;
-using WishFolio.Domain.Abstractions.Repositories;
+using WishFolio.Domain.Abstractions.Repositories.Write;
 using WishFolio.Domain.Entities.WishListAgregate;
 using WishFolio.Domain.Errors;
 using WishFolio.Domain.Shared.ResultPattern;

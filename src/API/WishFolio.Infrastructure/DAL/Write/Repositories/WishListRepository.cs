@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WishFolio.Domain.Abstractions.Repositories;
+using WishFolio.Domain.Abstractions.Repositories.Write;
 using WishFolio.Domain.Entities.WishListAgregate;
+using WishFolio.Infrastructure.Dal.Write;
 
-namespace WishFolio.Infrastructure.Dal.Repositories;
+namespace WishFolio.Infrastructure.Dal.Write.Repositories;
 
 public class WishListRepository : IWishListRepository
 {

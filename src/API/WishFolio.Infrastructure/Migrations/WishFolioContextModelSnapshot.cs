@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using WishFolio.Infrastructure.Dal;
+using WishFolio.Infrastructure.Dal.Write;
 
 #nullable disable
 
@@ -178,11 +178,13 @@ namespace WishFolio.Infrastructure.Migrations
                                 .HasColumnType("uuid");
 
                             b1.Property<int>("Age")
-                                .HasColumnType("integer");
+                                .HasColumnType("integer")
+                                .HasColumnName("Age");
 
                             b1.Property<string>("Name")
                                 .IsRequired()
-                                .HasColumnType("text");
+                                .HasColumnType("text")
+                                .HasColumnName("Name");
 
                             b1.HasKey("UserId");
 

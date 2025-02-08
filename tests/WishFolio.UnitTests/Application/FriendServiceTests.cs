@@ -1,5 +1,4 @@
 ﻿using Moq;
-using WishFolio.Domain.Abstractions.Repositories;
 using WishFolio.Domain.Abstractions.Auth;
 using WishFolio.Domain.Entities.UserAgregate.Friends;
 using AutoMapper;
@@ -8,6 +7,7 @@ using WishFolio.Domain.Entities.UserAgregate;
 using WishFolio.Application.UseCases.Friends.Queries.Dtos;
 using WishFolio.Application.UseCases.Friends.Commands.GetFriends;
 using WishFolio.Domain.Errors;
+using WishFolio.Domain.Abstractions.Repositories.Write;
 
 namespace WishFolio.UnitTests.Application;
 

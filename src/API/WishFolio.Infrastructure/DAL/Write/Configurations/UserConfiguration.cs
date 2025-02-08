@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using WishFolio.Domain.Entities.UserAgregate;
 
-namespace WishFolio.Infrastructure.Dal.Configurations;
+namespace WishFolio.Infrastructure.Dal.Write.Configurations;
 
 public class UserConfiguration : IEntityTypeConfiguration<User>
 {
@@ -26,9 +26,11 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.OwnsOne(u => u.Profile, p =>
         {
             p.Property(pp => pp.Name)
+             .HasColumnName("Name")
              .IsRequired();
 
             p.Property(pp => pp.Age)
+             .HasColumnName("Age")
              .IsRequired();
         });
 

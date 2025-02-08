@@ -1,6 +1,6 @@
-﻿using WishFolio.Domain.Abstractions.Repositories;
+﻿using WishFolio.Domain.Abstractions.Repositories.Write;
 
-namespace WishFolio.Infrastructure.Dal;
+namespace WishFolio.Infrastructure.Dal.Write;
 
 public class UnitOfWork : IUnitOfWork
 {

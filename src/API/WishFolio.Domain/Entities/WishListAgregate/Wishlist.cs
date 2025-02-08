@@ -1,4 +1,4 @@
-﻿using WishFolio.Domain.Abstractions.Repositories;
+﻿using WishFolio.Domain.Abstractions.Repositories.Write;
 using WishFolio.Domain.Errors;
 using WishFolio.Domain.Shared.ResultPattern;
 

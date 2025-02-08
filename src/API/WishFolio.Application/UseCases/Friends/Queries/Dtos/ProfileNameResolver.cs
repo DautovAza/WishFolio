@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using WishFolio.Domain.Abstractions.Repositories;
+using WishFolio.Domain.Abstractions.Repositories.Write;
 using WishFolio.Domain.Entities.UserAgregate.Friends;
 
 namespace WishFolio.Application.UseCases.Friends.Queries.Dtos;

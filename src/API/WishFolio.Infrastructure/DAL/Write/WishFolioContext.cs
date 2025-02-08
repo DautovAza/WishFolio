@@ -3,9 +3,9 @@ using WishFolio.Domain.Entities.UserAgregate;
 using WishFolio.Domain.Entities.UserAgregate.Friends;
 using WishFolio.Domain.Entities.UserAgregate.Notifications;
 using WishFolio.Domain.Entities.WishListAgregate;
-using WishFolio.Infrastructure.Dal.Configurations;
+using WishFolio.Infrastructure.Dal.Write.Configurations;
 
-namespace WishFolio.Infrastructure.Dal;
+namespace WishFolio.Infrastructure.Dal.Write;
 
 public class WishFolioContext : DbContext
 {
@@ -19,7 +19,7 @@ public class WishFolioContext : DbContext
     public WishFolioContext(DbContextOptions<WishFolioContext> options)
         : base(options)
     {
-         
+
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

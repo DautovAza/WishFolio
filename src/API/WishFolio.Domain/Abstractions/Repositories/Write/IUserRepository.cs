@@ -2,7 +2,7 @@
 using WishFolio.Domain.Entities.UserAgregate.Profile;
 using WishFolio.Domain.Entities.UserAgregate;
 
-namespace WishFolio.Domain.Abstractions.Repositories;
+namespace WishFolio.Domain.Abstractions.Repositories.Write;
 
 public interface IUserRepository
 {

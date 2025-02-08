@@ -1,8 +1,8 @@
 ﻿using WishFolio.Application.Common;
 using WishFolio.Domain.Errors;
 using WishFolio.Domain.Abstractions.Auth;
-using WishFolio.Domain.Abstractions.Repositories;
 using WishFolio.Domain.Shared.ResultPattern;
+using WishFolio.Domain.Abstractions.Repositories.Write;
 
 namespace WishFolio.Application.UseCases.Friends.Commands.CreateFriendRequest;
 

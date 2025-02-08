@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using MediatR;
+using WishFolio.WebApi.Controllers.Abstractions;
 using WishFolio.WebApi.Controllers.Friends.ViewModels;
+using WishFolio.Domain.Entities.UserAgregate.Friends;
 using WishFolio.Application.UseCases.Friends.Queries.Dtos;
 using WishFolio.Application.UseCases.Friends.Commands.GetFriends;
 using WishFolio.Application.UseCases.Friends.Commands.CreateFriendRequest;
 using WishFolio.Application.UseCases.Friends.Commands.AcceptFriendRequest;
 using WishFolio.Application.UseCases.Friends.Commands.RejectFriendRequest;
-using WishFolio.Domain.Entities.UserAgregate.Friends;
-using WishFolio.WebApi.Controllers.Abstractions;
 
 namespace WishFolio.WebApi.Controllers.Friends;
 

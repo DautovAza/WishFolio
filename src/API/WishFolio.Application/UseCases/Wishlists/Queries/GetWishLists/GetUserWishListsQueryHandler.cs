@@ -3,8 +3,8 @@ using WishFolio.Application.Common;
 using WishFolio.Application.UseCases.Wishlists.Queries.Dtos;
 using WishFolio.Domain.Errors;
 using WishFolio.Domain.Abstractions.Auth;
-using WishFolio.Domain.Abstractions.Repositories;
 using WishFolio.Domain.Shared.ResultPattern;
+using WishFolio.Domain.Abstractions.Repositories.Write;
 
 namespace WishFolio.Application.UseCases.Wishlists.Queries.GetWishLists;
 
