@@ -2,46 +2,50 @@
 using Microsoft.AspNetCore.Authorization;
 using MediatR;
 using WishFolio.WebApi.Controllers.Abstractions;
-using WishFolio.WebApi.Controllers.WishLists.Dtos;
 using WishFolio.Application.UseCases.Wishlists.Queries.Dtos;
 using WishFolio.Application.UseCases.Wishlists.Queries.GetWishLists;
 using WishFolio.Application.UseCases.WishListItems.Queries.GetWishListItemDetail;
 using WishFolio.Application.UseCases.Wishlists.Commands.CreateWishList;
 using WishFolio.Application.UseCases.Wishlists.Commands.RemoveWishList;
+using AutoMapper;
+using WishFolio.WebApi.Controllers.WishLists.ViewModels.WishLists;
+using WishFolio.WebApi.Controllers.WishLists.ViewModels.Items;
 
 namespace WishFolio.WebApi.Controllers.WishLists;
 
 [Authorize]
 [ApiController]
 [Route("api/{userId:guid}/[controller]")]
-public class WishListsController : ResultHandlerControllerBase
+public class WishListsController : MappingResultHandlerControllerBase
 {
-    public WishListsController(ISender sender)
-        : base(sender)
+    public WishListsController(ISender sender, IMapper mapper)
+        : base(sender, mapper)
     {
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<WishListDto>>> GetWishLists([FromRoute] Guid userId)
+    public Task<ActionResult<IEnumerable<WishListModel>>> GetWishLists([FromRoute] Guid userId)
     {
-        return await HandleResultResponseForRequest(new GetUserWishListsQuery(userId));
+        return HandleRequestResult<IEnumerable<WishListDto>, IEnumerable<WishListModel>>(new GetUserWishListsQuery(userId));
     }
 
     [HttpGet("{wishListName}/Details")]
-    public async Task<ActionResult<WishListItemDetailsDto>> GetWishItemDetailInfo([FromRoute] Guid userId, [FromRoute] string wishListName, [FromQuery] Guid itemId)
+    public async Task<ActionResult<WishListItemDetailedModel>> GetWishItemDetailInfo([FromRoute] Guid userId, [FromRoute] string wishListName, [FromQuery] Guid itemId)
     {
-        return await HandleResultResponseForRequest(new GetWishListItemDetailQuery(userId, wishListName, itemId));
+        return await HandleRequestResult<WishListItemDetailsDto, WishListItemDetailedModel>(new GetWishListItemDetailQuery(userId, wishListName, itemId));
     }
 
     [HttpPost]
-    public async Task<ActionResult> AddWishList([FromBody] AddWishListRequest request)
+    public async Task<ActionResult> AddWishList([FromBody] AddWishListModel request)
     {
-        return await HandleResultResponseForRequest(new CreateWishListCommand(request.Name, request.Description, request.VisabilityLevel));
+        var command = Mapper.Map<CreateWishListCommand>(request);
+        return await HandleRequestResult(command);
     }
 
     [HttpDelete]
-    public async Task<ActionResult> RemoveWishList([FromBody] RemoveWishListRequest request)
+    public async Task<ActionResult> RemoveWishList([FromBody] RemoveWishListModel request)
     {
-        return await HandleResultResponseForRequest(new RemoveWishListByNameCommand(request.Name));
+        var command = Mapper.Map<RemoveWishListByNameCommand>(request);
+        return await HandleRequestResult(command);
     }
 }

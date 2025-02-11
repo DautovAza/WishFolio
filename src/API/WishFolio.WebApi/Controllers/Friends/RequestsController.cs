@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using MediatR;
+using AutoMapper;
 using WishFolio.WebApi.Controllers.Abstractions;
 using WishFolio.WebApi.Controllers.Friends.ViewModels;
 using WishFolio.Domain.Entities.UserAgregate.Friends;
@@ -15,46 +16,47 @@ namespace WishFolio.WebApi.Controllers.Friends;
 [Authorize]
 [ApiController]
 [Route("api/friends/[controller]")]
-public class RequestsController : ResultHandlerControllerBase
+public class RequestsController : MappingResultHandlerControllerBase
 {
-    public RequestsController(ISender sender) : base(sender)
+    public RequestsController(ISender sender,IMapper mapper) 
+        : base(sender, mapper)
     {
     }
 
     [HttpPost()]
-    public async Task<ActionResult> AddFriend([FromBody] AddFriendRequest request)
+    public  Task<ActionResult> AddFriend([FromBody] AddFriendModel request)
     {
-        if (request.FriendId.HasValue)
+        if (request.UserId.HasValue)
         {
-            return await HandleResultResponseForRequest(new CreateFriendRequestByIdCommand(request.FriendId.Value));
+            return  HandleRequestResult(new CreateFriendRequestByIdCommand(request.UserId.Value));
         }
         else
         {
-            return await HandleResultResponseForRequest(new CreateFriendRequestByEmailCommand(request.FriendEmail));
+            return  HandleRequestResult(new CreateFriendRequestByEmailCommand(request.UserEmail));
         }
     }
 
     [HttpPut("{friendId}/accept")]
-    public async Task<ActionResult> AcceptRequest(Guid friendId)
+    public  Task<ActionResult> AcceptRequest(Guid friendId)
     {
-        return await HandleResultResponseForRequest(new AcceptFriendRequestCommand(friendId));
+        return  HandleRequestResult(new AcceptFriendRequestCommand(friendId));
     }
 
     [HttpPut("{friendId}/reject")]
-    public async Task<ActionResult> RejectRequest(Guid friendId)
+    public  Task<ActionResult> RejectRequest(Guid friendId)
     {
-        return await HandleResultResponseForRequest(new RejectFriendRequestCommand(friendId));
+        return  HandleRequestResult(new RejectFriendRequestCommand(friendId));
     }
 
     [HttpGet("incoming")]
-    public async Task<ActionResult<List<FriendDto>>> GetIncomingRequests()
+    public Task<ActionResult<IEnumerable<FriendModel>>> GetIncomingRequests()
     {
-        return await HandleResultResponseForRequest(new GetFriendsQuery(FriendshipStatus.Requested));
+        return  HandleRequestResult<IEnumerable<FriendDto>, IEnumerable<FriendModel>>(new GetFriendsQuery(FriendshipStatus.Requested));
     }
 
     [HttpGet("sent")]
-    public async Task<ActionResult<List<FriendDto>>> GetSentRequests()
+    public  Task<ActionResult<IEnumerable<FriendModel>>> GetSentRequests()
     {
-        return await HandleResultResponseForRequest(new GetFriendsQuery(FriendshipStatus.Pending));
+        return HandleRequestResult<IEnumerable<FriendDto>, IEnumerable<FriendModel>>(new GetFriendsQuery(FriendshipStatus.Pending));
     }
 }

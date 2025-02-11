@@ -2,7 +2,7 @@
 
 namespace WishFolio.Application.UseCases.Friends.Queries.Dtos;
 
-public record class FriendDto
+public record FriendDto
 {
     public Guid Id { get; set; }
     public FriendshipStatus Status { get; set; }

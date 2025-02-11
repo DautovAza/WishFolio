@@ -4,4 +4,4 @@ using WishFolio.Domain.Entities.UserAgregate.Friends;
 
 namespace WishFolio.Application.UseCases.Friends.Commands.GetFriends;
 
-public record GetFriendsQuery(FriendshipStatus FriendshipStatus) : RequestBase<List<FriendDto>> { }
+public record GetFriendsQuery(FriendshipStatus FriendshipStatus) : RequestBase<IEnumerable<FriendDto>> { }

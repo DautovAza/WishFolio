@@ -6,20 +6,20 @@ namespace WishFolio.WebApi.Controllers.Abstractions;
 
 public abstract class ResultHandlerControllerBase : ControllerBase
 {
-    private readonly ISender _sender;
+    protected ISender Sender { get; }
 
     public ResultHandlerControllerBase(ISender sender)
         : base()
     {
-        _sender = sender;
+        Sender = sender;
     }
 
-    protected async Task<ActionResult<TResponce>> HandleResultResponseForRequest<TResponce>(IRequest<Result<TResponce>> request)
+    protected async Task<ActionResult<TResponce>> HandleRequestResult<TResponce>(IRequest<Result<TResponce>> request)
         where TResponce : class
     {
         try
         {
-            var result = await _sender.Send(request);
+            var result = await Sender.Send(request);
             if (result.IsSuccess)
             {
                 return Ok(result.Value);
@@ -33,11 +33,11 @@ public abstract class ResultHandlerControllerBase : ControllerBase
         }
     }
 
-    protected async Task<ActionResult> HandleResultResponseForRequest(IRequest<Result> request)
+    protected async Task<ActionResult> HandleRequestResult(IRequest<Result> request)
     {
         try
         {
-            var result = await _sender.Send(request);
+            var result = await Sender.Send(request);
             if (result.IsSuccess)
             {
                 return Ok();

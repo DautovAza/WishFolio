@@ -21,18 +21,18 @@ public class ReservationController : ResultHandlerControllerBase
     [HttpPost]
     public async Task<IActionResult> ReserveItem([FromRoute] Guid itemId, [FromQuery] bool isAnonymous = false)
     {
-        return await HandleResultResponseForRequest(new ReserveItemCommand(itemId, isAnonymous));
+        return await HandleRequestResult(new ReserveItemCommand(itemId, isAnonymous));
     }
 
     [HttpPut]
     public async Task<IActionResult> AcceptReservation([FromRoute] Guid itemId)
     {
-        return await HandleResultResponseForRequest(new AcceptReservationItemCommand(itemId));
+        return await HandleRequestResult(new AcceptReservationItemCommand(itemId));
     }
 
     [HttpDelete]
     public async Task<IActionResult> CancelReservation([FromQuery] Guid itemId)
     {
-        return await HandleResultResponseForRequest(new CancelReservationItemCommand(itemId));
+        return await HandleRequestResult(new CancelReservationItemCommand(itemId));
     }
 }

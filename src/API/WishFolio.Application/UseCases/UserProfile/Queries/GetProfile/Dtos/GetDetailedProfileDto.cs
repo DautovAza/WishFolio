@@ -1,6 +1,6 @@
-﻿namespace WishFolio.Application.UseCases.UserProfile.Queries.Dtos;
+﻿namespace WishFolio.Application.UseCases.UserProfile.Queries.GetProfile.Dtos;
 
-public record GetProfileResponse
+public record GetDetailedProfileDto
 {
     public Guid Id { get; set; }
     public string Name { get; set; }

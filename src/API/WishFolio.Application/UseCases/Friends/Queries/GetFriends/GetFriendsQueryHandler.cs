@@ -8,7 +8,7 @@ using WishFolio.Application.UseCases.Friends.Queries.Dtos;
 
 namespace WishFolio.Application.UseCases.Friends.Commands.GetFriends;
 
-public class GetFriendsQueryHandler : RequestHandlerBase<GetFriendsQuery, List<FriendDto>>
+public class GetFriendsQueryHandler : RequestHandlerBase<GetFriendsQuery, IEnumerable<FriendDto>>
 {
     private readonly ICurrentUserService _currentUserService;
     private readonly IMapper _mapper;
@@ -19,13 +19,13 @@ public class GetFriendsQueryHandler : RequestHandlerBase<GetFriendsQuery, List<F
         _mapper = mapper;
     }
 
-    public override async Task<Result<List<FriendDto>>> Handle(GetFriendsQuery request, CancellationToken cancellationToken)
+    public override async Task<Result<IEnumerable<FriendDto>>> Handle(GetFriendsQuery request, CancellationToken cancellationToken)
     {
         var user = await _currentUserService.GetCurrentUserAsync();
 
         if (user == null)
         {
-            return Result<List<FriendDto>>.Failure(DomainErrors.User.UserNotFound());
+            return Result<IEnumerable<FriendDto>>.Failure(DomainErrors.User.UserNotFound());
         }
 
         var friends = user.Friends

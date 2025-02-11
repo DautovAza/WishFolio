@@ -16,13 +16,13 @@ public class UserProfileReadRepository : IUserProfileReadRepository
 
     public async Task<UserProfileReadModel?> GetByEmail(string email)
     {
-        var query = @"SELECT ""Id"", ""Email"", ""Name"", ""Age"" FROM ""Users"" WHERE ""Email"" = @Email";
+        var query = @"SELECT * FROM ""Users"" WHERE ""Id"" = @Id";
         return await _connection.QuerySingleOrDefaultAsync<UserProfileReadModel>(query, new { Email = email });
     }
 
     public async Task<UserProfileReadModel?> GetByIdAsync(Guid id)
     {
-        var query = @"SELECT ""Id"", ""Email"", ""Name"", ""Age"" FROM ""Users"" WHERE ""Id"" = @id";
+        var query = @"SELECT * FROM ""Users"" WHERE ""Id"" = @Id";
         return await _connection.QuerySingleOrDefaultAsync<UserProfileReadModel>(query, new { Id = id });
     }
 }
