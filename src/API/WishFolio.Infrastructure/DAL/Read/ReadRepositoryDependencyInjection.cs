@@ -20,8 +20,8 @@ public static class ReadRepositoryDependencyInjection
 
         }));
 
-        serives
-            .AddScoped<IUserProfileReadRepository, UserProfileReadRepository>();
+        serives.AddScoped<IUserProfileReadRepository, UserProfileReadRepository>();
+        serives.AddScoped<IFriendsReadRepository, FriendsReadRepository>();
 
         return serives;
     }

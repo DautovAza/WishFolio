@@ -14,7 +14,7 @@ public class UserProfileReadRepository : IUserProfileReadRepository
         _connection = connection;
     }
 
-    public async Task<UserProfileReadModel?> GetByEmail(string email)
+    public async Task<UserProfileReadModel?> GetByEmailAsync(string email)
     {
         var query = @"SELECT * FROM ""Users"" WHERE ""Id"" = @Id";
         return await _connection.QuerySingleOrDefaultAsync<UserProfileReadModel>(query, new { Email = email });
