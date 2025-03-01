@@ -43,11 +43,11 @@ public abstract class ResultHandlerControllerBase : ControllerBase
                 return Ok();
             }
             var error = result.Errors.First();
-            return Problem(error.ErrorCode, error.Message);
+            return BadRequest(error.Message);
         }
         catch (Exception ex)
         {
-            return BadRequest(ex.Message);
+            return Problem(ex.Message, statusCode: 500);
         }
     }
 }

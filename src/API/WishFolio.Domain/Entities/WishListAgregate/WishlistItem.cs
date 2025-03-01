@@ -21,6 +21,7 @@ public class WishlistItem : AuditableEntity
     private WishlistItem(Guid id)
     {
         Id = id;
+        ReservationStatus = ReservationStatus.Available;
     }
 
     public Result Update(string name, string description, string link)

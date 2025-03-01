@@ -1,0 +1,75 @@
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using WishFolio.Domain.Abstractions.Auth;
+using WishFolio.Domain.Entities.UserAgregate;
+using WishFolio.Domain.Entities.WishListAgregate;
+using WishFolio.Infrastructure.Dal.Write;
+using WishFolio.Infrastructure.Dal.Write.Repositories;
+
+namespace WishFolio.Infrastructure.DataSeeding;
+
+public static class DbInitializer
+{
+    public static async Task<IHost> UseTestDataAsync(this IHost app)
+    {
+        using var scope = app.Services.CreateScope();
+        var context = scope.ServiceProvider.GetService<WishFolioContext>();
+        var passwordHasher = scope.ServiceProvider.GetService<IPasswordHasher>();
+
+        await context.AddTestDataAsync(passwordHasher);
+        return app;
+    }
+
+    private static async Task AddTestDataAsync(this WishFolioContext context, IPasswordHasher passwordHasher)
+    {
+        if (context.Users.Any())
+        {
+            return;
+        }
+        var users = CreateUsers(passwordHasher);
+        var wishlists = await CreateWishLists(context, users);
+
+        await context.Users.AddRangeAsync(users);
+        await context.WishLists.AddRangeAsync(wishlists);
+
+        await context.SaveChangesAsync();
+    }
+
+    private static User[] CreateUsers(IPasswordHasher passwordHasher)
+    {
+        User[] users =
+        [
+            User.Create("test@test.com", "test user1", 18, "test", passwordHasher).Value,
+            User.Create("test2@test.com", "test user2", 18, "test", passwordHasher).Value,
+            User.Create("test3@test.com", "test user3", 18, "test", passwordHasher).Value,
+            User.Create("test4@test.com", "test user4", 18, "test", passwordHasher).Value,
+        ];
+
+        users[0].AddToFriends(users[1]);
+        users[1].AcceptFriendRequest(users[0]);
+        return users;
+    }
+
+    private static async Task<WishList[]> CreateWishLists(WishFolioContext context, User[] users)
+    {
+        WishListRepository wishListRepository = new WishListRepository(context);
+        WishList[] wishLists =
+        [
+            await WishList.CreateAsync(users[0].Id, "wishList 1", "wishList 1 description", VisabilityLevel.Public,wishListRepository),
+            await WishList.CreateAsync(users[0].Id, "wishList 2", "wishList 2 description", VisabilityLevel.FriendsOnly,wishListRepository),
+        ];
+
+        WishlistItem[] wishlistItems =
+        [
+            WishlistItem.Create("item 1", " item 1 test description. Owned by wishlist 1", "http://somesite/items/alotofmoney").Value,
+            WishlistItem.Create("item 2", " item 2 test description. Owned by wishlist 1","http://somesite/items/rabbit").Value,
+        ];
+
+        foreach (var wishlistItem in wishlistItems)
+        {
+            _ = wishLists[0].AddItem(wishlistItem);
+        }
+
+        return wishLists;
+    }
+}

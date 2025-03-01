@@ -5,6 +5,7 @@ using WishFolio.Infrastructure.CORS;
 using WishFolio.Infrastructure.Swagger;
 using WishFolio.Infrastructure.Dal.Write;
 using WishFolio.Infrastructure.DAL.Read;
+using WishFolio.Infrastructure.DataSeeding;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,7 +33,9 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.ApplyMigrations();
-    
+
+    await app.UseTestDataAsync();
+
     app.UseSwagger()
        .UseSwaggerUI();
 }

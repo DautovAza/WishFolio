@@ -27,11 +27,11 @@ public abstract class MappingResultHandlerControllerBase : ResultHandlerControll
                 return Ok(model);
             }
             var error = result.Errors.First();
-            return Problem(error.ErrorCode, error.Message);
+            return BadRequest(error.Message);
         }
         catch (Exception ex)
         {
-            return BadRequest(ex.Message);
+            return Problem(ex.Message,statusCode: 500);
         }
     }
 }

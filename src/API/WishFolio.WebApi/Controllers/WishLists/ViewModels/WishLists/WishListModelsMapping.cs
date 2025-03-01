@@ -22,8 +22,8 @@ public class WishListModelsMapping : Profile
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
-            .ForMember(dest => dest.VisabilityLevel, opt => opt.MapFrom(src => src.VisabilityLevel.ToString()))
-            .ForMember(dest => dest.Items , opt => opt.MapFrom(src =>src.Items));
+            .ForMember(dest => dest.VisabilityLevel, opt => opt.MapFrom(src => src.VisabilityLevel.ToString()));
+            //.ForMember(dest => dest.Items , opt => opt.MapFrom(src =>src.Items));
     }
 
     private static VisabilityLevel ParceVisabilityLevel(string visabilityLevelString)

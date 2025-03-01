@@ -23,7 +23,7 @@ public class WishListRepository : IWishListRepository
     {
         return await _context.WishLists
             .Where(wl => wl.OwnerId == userId)
-            .Where(wl => wl.Visibility >= visabilityLevel)
+            .Where(wl => wl.Visibility <= visabilityLevel)
             .FirstOrDefaultAsync(wl => wl.Name == name);
     }
 
@@ -31,7 +31,7 @@ public class WishListRepository : IWishListRepository
     {
         return await _context.WishLists
              .Where(wl => wl.OwnerId == ownerId)
-             .Where(wl => wl.Visibility >= visabilityLevel)
+             .Where(wl => wl.Visibility <= visabilityLevel)
              .ToListAsync();
     }
 

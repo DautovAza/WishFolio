@@ -13,9 +13,12 @@ public class WishList
     public string Name { get; private set; }
     public string Description { get; private set; }
     public VisabilityLevel Visibility { get; private set; }
-    public IReadOnlyList<WishlistItem> Items => _items.AsReadOnly();
+    public IReadOnlyCollection<WishlistItem> Items => _items.AsReadOnly();
 
-    private WishList() { }
+    private WishList()
+    {
+        _items = new List<WishlistItem>();
+    }
 
     private WishList(Guid ownerId)
     {
