@@ -88,8 +88,7 @@ public class WishList
         {
             return Result.Failure(DomainErrors.WishList.NameIsToLong(name));
         }
-
-
+        
         Name = name;
 
         return Result.Ok();

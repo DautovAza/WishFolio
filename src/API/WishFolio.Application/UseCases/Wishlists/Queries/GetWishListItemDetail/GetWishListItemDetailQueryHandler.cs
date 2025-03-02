@@ -8,9 +8,6 @@ using WishFolio.Domain.Abstractions.Repositories.Write;
 
 namespace WishFolio.Application.UseCases.WishListItems.Queries.GetWishListItemDetail;
 
-public record GetWishListItemDetailQuery(Guid UserId, string WishListName, Guid ItemId)
-    : RequestBase<WishListItemDetailsDto>;
-
 public class GetWishListItemDetailQueryHandler : RequestHandlerBase<GetWishListItemDetailQuery, WishListItemDetailsDto>
 {
     private readonly IWishListRepository _wishListRepository;

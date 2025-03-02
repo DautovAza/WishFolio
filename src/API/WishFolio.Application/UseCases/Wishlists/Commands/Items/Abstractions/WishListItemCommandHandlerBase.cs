@@ -5,7 +5,7 @@ using WishFolio.Domain.Entities.WishListAgregate;
 using WishFolio.Domain.Errors;
 using WishFolio.Domain.Shared.ResultPattern;
 
-namespace WishFolio.Application.UseCases.WishListItems.Commands.Abstractions;
+namespace WishFolio.Application.UseCases.Wishlists.Commands.Items.Abstractions;
 
 public abstract class WishListItemCommandHandlerBase<TCommand> : RequestHandlerBase<TCommand>
     where TCommand : RequestBase, IWishListItemCommand

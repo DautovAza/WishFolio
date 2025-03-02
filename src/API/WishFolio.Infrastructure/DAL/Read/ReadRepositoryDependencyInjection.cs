@@ -22,6 +22,7 @@ public static class ReadRepositoryDependencyInjection
 
         serives.AddScoped<IUserProfileReadRepository, UserProfileReadRepository>();
         serives.AddScoped<IFriendsReadRepository, FriendsReadRepository>();
+        serives.AddScoped<IWishlistReadRepository, WishlistReadRepository>();
 
         return serives;
     }

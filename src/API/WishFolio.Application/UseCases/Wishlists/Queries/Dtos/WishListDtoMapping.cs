@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using WishFolio.Domain.Abstractions.ReadModels.WishLlists;
 using WishFolio.Domain.Entities.WishListAgregate;
 
 namespace WishFolio.Application.UseCases.Wishlists.Queries.Dtos;
@@ -7,22 +8,20 @@ public class WishListDtoMapping : Profile
 {
     public WishListDtoMapping()
     {
-        CreateMap<WishlistItem, WishListItemDto>()
+        CreateMap<WishlistItemReadModel, WishListItemDto>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
 
-        CreateMap<WishlistItem, WishListItemDetailsDto>()
+        CreateMap<WishlistItemReadModel, WishListItemDetailsDto>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
-            .ForMember(dest => dest.Uri, opt => opt.MapFrom(src => src.Link));
+            .ForMember(dest => dest.Uri, opt => opt.MapFrom(src => src.Uri));
 
-        CreateMap<WishList, WishListDto>()
+        CreateMap<WishlistReadModel, WishListDto>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
-            .ForMember(dest => dest.VisabilityLevel, opt => opt.MapFrom(src => src.Visibility))
-            .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items));
-
+            .ForMember(dest => dest.VisabilityLevel, opt => opt.MapFrom(src => src.Visibility));
     }
 }

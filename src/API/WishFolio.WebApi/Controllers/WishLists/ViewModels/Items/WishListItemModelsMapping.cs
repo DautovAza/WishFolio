@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using WishFolio.Application.UseCases.WishListItems.Commands.AddWishListItem;
-using WishFolio.Application.UseCases.WishListItems.Commands.UpdateWishListItem;
+using WishFolio.Application.UseCases.Wishlists.Commands.Items.AddWishListItem;
+using WishFolio.Application.UseCases.Wishlists.Commands.Items.UpdateWishListItem;
 using WishFolio.Application.UseCases.Wishlists.Queries.Dtos;
 
 namespace WishFolio.WebApi.Controllers.WishLists.ViewModels.Items;

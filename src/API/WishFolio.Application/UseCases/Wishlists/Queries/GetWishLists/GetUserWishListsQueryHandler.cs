@@ -5,6 +5,7 @@ using WishFolio.Domain.Errors;
 using WishFolio.Domain.Abstractions.Auth;
 using WishFolio.Domain.Shared.ResultPattern;
 using WishFolio.Domain.Abstractions.Repositories.Write;
+using WishFolio.Domain.Abstractions.Repositories.Read;
 
 namespace WishFolio.Application.UseCases.Wishlists.Queries.GetWishLists;
 
@@ -12,12 +13,12 @@ public class GetUserWishListsQueryHandler : RequestHandlerBase<GetUserWishListsQ
 {
     private readonly ICurrentUserService _currentUserService;
     private readonly IUserRepository _userRepository;
-    private readonly IWishListRepository _wishListRepository;
+    private readonly IWishlistReadRepository _wishListRepository;
     private readonly IMapper _mapper;
 
     public GetUserWishListsQueryHandler(ICurrentUserService currentUserService, 
         IUserRepository userRepository,
-        IWishListRepository wishListRepository,
+        IWishlistReadRepository wishListRepository,
         IMapper mapper)
     {
         _currentUserService = currentUserService;
@@ -37,8 +38,8 @@ public class GetUserWishListsQueryHandler : RequestHandlerBase<GetUserWishListsQ
         }
 
         var visabilityLevel = ownerUser.GetWihListVisabilityLevelForUser(watchUserId);
-        var wishlists = await _wishListRepository.GetOwnerWishListsAsync(ownerUser.Id, visabilityLevel);
+        var wishlists = await _wishListRepository.GetUserWishlistsAsync(ownerUser.Id, visabilityLevel);
 
-        return Ok( _mapper.Map<List<WishListDto>>(wishlists));
+        return Ok( _mapper.Map<IEnumerable<WishListDto>>(wishlists));
     }
 }

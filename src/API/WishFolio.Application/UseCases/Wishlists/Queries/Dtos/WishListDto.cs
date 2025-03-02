@@ -8,6 +8,4 @@ public record WishListDto
     public string Name { get; set; }
     public string Description { get; set; }
     public VisabilityLevel VisabilityLevel { get; set; }
-
-    public List<WishListItemDto> Items { get; set; }
 }

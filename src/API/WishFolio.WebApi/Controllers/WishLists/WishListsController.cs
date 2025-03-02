@@ -10,6 +10,7 @@ using WishFolio.Application.UseCases.Wishlists.Commands.RemoveWishList;
 using AutoMapper;
 using WishFolio.WebApi.Controllers.WishLists.ViewModels.WishLists;
 using WishFolio.WebApi.Controllers.WishLists.ViewModels.Items;
+using WishFolio.Application.UseCases.Wishlists.Queries.GetWishlistItems;
 
 namespace WishFolio.WebApi.Controllers.WishLists;
 
@@ -33,6 +34,12 @@ public class WishListsController : MappingResultHandlerControllerBase
     public async Task<ActionResult<WishListItemDetailedModel>> GetWishItemDetailInfo([FromRoute] Guid userId, [FromRoute] string wishListName, [FromQuery] Guid itemId)
     {
         return await HandleRequestResult<WishListItemDetailsDto, WishListItemDetailedModel>(new GetWishListItemDetailQuery(userId, wishListName, itemId));
+    }   
+    
+    [HttpGet("{wishListName}")]
+    public async Task<ActionResult<IEnumerable<WishListItemModel>>> GetWishlistItems([FromRoute] Guid userId, [FromRoute] string wishListName)
+    {
+        return await HandleRequestResult<IEnumerable<WishListItemDto>, IEnumerable< WishListItemModel>>(new GetWishlistItemsQuery(userId, wishListName));
     }
 
     [HttpPost]

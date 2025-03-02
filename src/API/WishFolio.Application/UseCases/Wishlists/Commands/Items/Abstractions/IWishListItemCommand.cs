@@ -1,4 +1,4 @@
-﻿namespace WishFolio.Application.UseCases.WishListItems.Commands.Abstractions;
+﻿namespace WishFolio.Application.UseCases.Wishlists.Commands.Items.Abstractions;
 
 public interface IWishListItemCommand
 {

@@ -1,5 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using WishFolio.Domain.Abstractions.Auth;
 using WishFolio.Domain.Entities.UserAgregate;
 using WishFolio.Domain.Entities.WishListAgregate;
@@ -63,6 +63,14 @@ public static class DbInitializer
         [
             WishlistItem.Create("item 1", " item 1 test description. Owned by wishlist 1", "http://somesite/items/alotofmoney").Value,
             WishlistItem.Create("item 2", " item 2 test description. Owned by wishlist 1","http://somesite/items/rabbit").Value,
+            WishlistItem.Create("item 3", " item 3 test description. Owned by wishlist 1","http://somesite/items/item3").Value,
+            WishlistItem.Create("item 4", " item 4 test description. Owned by wishlist 1","http://somesite/items/item4").Value,
+            WishlistItem.Create("item 5", " item 5 test description. Owned by wishlist 1","http://somesite/items/item5").Value,
+            WishlistItem.Create("item 6", " item 6 test description. Owned by wishlist 1","http://somesite/items/item6").Value,
+            WishlistItem.Create("item 7", " item 7 test description. Owned by wishlist 1","http://somesite/items/item7").Value,
+            WishlistItem.Create("item 8", " item 8 test description. Owned by wishlist 1","http://somesite/items/item8").Value,
+            WishlistItem.Create("item 9", " item 9 test description. Owned by wishlist 1","http://somesite/items/item9").Value,
+            WishlistItem.Create("item 10", " item 10 test description. Owned by wishlist 1","http://somesite/items/item10").Value,
         ];
 
         foreach (var wishlistItem in wishlistItems)

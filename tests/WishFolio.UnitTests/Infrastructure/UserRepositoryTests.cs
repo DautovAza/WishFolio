@@ -3,8 +3,8 @@ using Moq;
 using WishFolio.Domain.Abstractions.Auth;
 using WishFolio.Domain.Entities.UserAgregate;
 using WishFolio.Domain.Entities.UserAgregate.ValueObjects;
-using WishFolio.Infrastructure.Dal.Repositories;
 using WishFolio.Infrastructure.Dal.Write;
+using WishFolio.Infrastructure.Dal.Write.Repositories;
 
 namespace WishFolio.UnitTests.Infrastructure;
 

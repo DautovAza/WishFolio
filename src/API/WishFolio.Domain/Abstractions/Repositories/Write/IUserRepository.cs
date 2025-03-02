@@ -1,6 +1,5 @@
-﻿using WishFolio.Domain.Entities.UserAgregate.ValueObjects;
+﻿using WishFolio.Domain.Entities.UserAgregate;
 using WishFolio.Domain.Entities.UserAgregate.Profile;
-using WishFolio.Domain.Entities.UserAgregate;
 
 namespace WishFolio.Domain.Abstractions.Repositories.Write;
 

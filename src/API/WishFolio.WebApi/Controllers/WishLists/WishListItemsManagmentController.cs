@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using MediatR;
-using AutoMapper; 
+using AutoMapper;
 using WishFolio.Domain.Abstractions.Auth;
-using WishFolio.Application.UseCases.Wishlists.Queries.Dtos;
-using WishFolio.Application.UseCases.WishListItems.Commands.AddWishListItem;
-using WishFolio.Application.UseCases.WishListItems.Commands.RemoveWishListItem;
-using WishFolio.Application.UseCases.WishListItems.Commands.UpdateWishListItem;
-using WishFolio.Application.UseCases.WishListItems.Queries.GetWishListItemDetail;
 using WishFolio.WebApi.Controllers.Abstractions;
 using WishFolio.WebApi.Controllers.WishLists.ViewModels.Items;
+using WishFolio.Application.UseCases.Wishlists.Queries.Dtos;
+using WishFolio.Application.UseCases.WishListItems.Queries.GetWishListItemDetail;
+using WishFolio.Application.UseCases.Wishlists.Commands.Items.AddWishListItem;
+using WishFolio.Application.UseCases.Wishlists.Commands.Items.UpdateWishListItem;
+using WishFolio.Application.UseCases.Wishlists.Commands.Items.RemoveWishListItem;
 
 namespace WishFolio.WebApi.Controllers.WishLists;
 
