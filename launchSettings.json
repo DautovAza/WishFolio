@@ -3,8 +3,11 @@
     "Docker Compose": {
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
+      "composeLaunchAction": "None",
+      "composeLaunchServiceName": "wishfolio.webapi",
       "serviceActions": {
-        "wishfolio.webapi": "StartDebugging"
+        "wishfolio.webapi": "StartDebugging",
+        "db": "StartWithoutDebugging"
       }
     }
   }

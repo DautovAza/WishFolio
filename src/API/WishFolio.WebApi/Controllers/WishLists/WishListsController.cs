@@ -11,6 +11,7 @@ using AutoMapper;
 using WishFolio.WebApi.Controllers.WishLists.ViewModels.WishLists;
 using WishFolio.WebApi.Controllers.WishLists.ViewModels.Items;
 using WishFolio.Application.UseCases.Wishlists.Queries.GetWishlistItems;
+using WishFolio.Domain.Abstractions.Entities;
 
 namespace WishFolio.WebApi.Controllers.WishLists;
 
@@ -37,9 +38,9 @@ public class WishListsController : MappingResultHandlerControllerBase
     }   
     
     [HttpGet("{wishListName}")]
-    public async Task<ActionResult<IEnumerable<WishListItemModel>>> GetWishlistItems([FromRoute] Guid userId, [FromRoute] string wishListName)
+    public async Task<ActionResult<PagedCollection<WishListItemModel>>> GetWishlistItems([FromRoute] Guid userId, [FromRoute] string wishListName, [FromQuery] int pageNumber=1,int pageSize=3)
     {
-        return await HandleRequestResult<IEnumerable<WishListItemDto>, IEnumerable< WishListItemModel>>(new GetWishlistItemsQuery(userId, wishListName));
+        return await HandleRequestResult<PagedCollection<WishListItemDto>, PagedCollection< WishListItemModel>>(new GetWishlistItemsQuery(userId, wishListName,pageNumber,pageSize));
     }
 
     [HttpPost]

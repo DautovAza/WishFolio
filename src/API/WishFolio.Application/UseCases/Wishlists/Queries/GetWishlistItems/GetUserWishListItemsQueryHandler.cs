@@ -1,15 +1,16 @@
 ﻿using AutoMapper;
 using WishFolio.Application.Common;
 using WishFolio.Application.UseCases.Wishlists.Queries.Dtos;
+using WishFolio.Domain.Errors;
+using WishFolio.Domain.Shared.ResultPattern;
 using WishFolio.Domain.Abstractions.Auth;
 using WishFolio.Domain.Abstractions.Repositories.Read;
 using WishFolio.Domain.Abstractions.Repositories.Write;
-using WishFolio.Domain.Errors;
-using WishFolio.Domain.Shared.ResultPattern;
+using WishFolio.Domain.Abstractions.Entities;
 
 namespace WishFolio.Application.UseCases.Wishlists.Queries.GetWishlistItems;
 
-public class GetUserWishListItemsQueryHandler : RequestHandlerBase<GetWishlistItemsQuery, IEnumerable<WishListItemDto>>
+public class GetUserWishListItemsQueryHandler : RequestHandlerBase<GetWishlistItemsQuery, PagedCollection<WishListItemDto>>
 {
     private readonly ICurrentUserService _currentUserService;
     private readonly IUserRepository _userRepository;
@@ -27,7 +28,7 @@ public class GetUserWishListItemsQueryHandler : RequestHandlerBase<GetWishlistIt
         _mapper = mapper;
     }
 
-    public override async Task<Result<IEnumerable<WishListItemDto>>> Handle(GetWishlistItemsQuery request, CancellationToken cancellationToken)
+    public override async Task<Result<PagedCollection<WishListItemDto>>> Handle(GetWishlistItemsQuery request, CancellationToken cancellationToken)
     {
         var watchUserId = _currentUserService.GetCurrentUserId();
         var ownerUser = await _userRepository.GetByIdAsync(request.UserId);
@@ -45,8 +46,8 @@ public class GetUserWishListItemsQueryHandler : RequestHandlerBase<GetWishlistIt
             return Failure(DomainErrors.WishList.NotFoundByName(request.WishListName));
         }
 
-        var items = await _wishListRepository.GetWishlistItemsAsync(wishlist.Id);
+        var pagedItems = await _wishListRepository.GetPagedWishlistItemsAsync(wishlist.Id,request.PageNumber, request.PageSize);
 
-        return Ok(_mapper.Map<IEnumerable<WishListItemDto>>(items));
+        return Ok(_mapper.Map<PagedCollection<WishListItemDto>>(pagedItems));
     }
 }
