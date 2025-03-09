@@ -10,6 +10,26 @@ namespace WishFolio.Infrastructure.DataSeeding;
 
 public static class DbInitializer
 {
+    private static readonly string[] _fakeNames =
+        [
+        "Мистер КОТ",
+        "Кот чериш",
+        "Кот чериш2",
+        "Кот чериш3",
+        "Sobaka Sytulaya",
+        "Случайный прохожий",
+        "Просто Боб",
+        "Agent не_движимости",
+        "Anderson Mr",
+        "Persi Val",
+        "Виноградом накормлю",
+        "Винокур Владимир",
+        "Владимир Больших",
+        "Влад Брат",
+        "Брат Брат",
+        "Брат Небрат",
+        ];
+
     public static async Task<IHost> UseTestDataAsync(this IHost app)
     {
         using var scope = app.Services.CreateScope();
@@ -39,14 +59,17 @@ public static class DbInitializer
     {
         User[] users =
         [
-            User.Create("test@test.com", "test user1", 18, "test", passwordHasher).Value,
-            User.Create("test2@test.com", "test user2", 18, "test", passwordHasher).Value,
-            User.Create("test3@test.com", "test user3", 18, "test", passwordHasher).Value,
-            User.Create("test4@test.com", "test user4", 18, "test", passwordHasher).Value,
+            User.Create("test@test.com", "test user1", 18, "test", passwordHasher).Value!,
+            .. CreateTestUsers(2, 10, passwordHasher),
+            ..  CreateUsersFromNamesArray(passwordHasher),
         ];
 
         users[0].AddToFriends(users[1]);
+        users[0].AddToFriends(users[2]);
+        users[0].AddToFriends(users[3]);
         users[1].AcceptFriendRequest(users[0]);
+        users[2].AcceptFriendRequest(users[0]);
+        users[3].AcceptFriendRequest(users[0]);
         return users;
     }
 
@@ -55,24 +78,11 @@ public static class DbInitializer
         WishListRepository wishListRepository = new WishListRepository(context);
         WishList[] wishLists =
         [
-            await WishList.CreateAsync(users[0].Id, "wishList 1", "wishList 1 description", VisabilityLevel.Public,wishListRepository),
-            await WishList.CreateAsync(users[0].Id, "wishList 2", "wishList 2 description", VisabilityLevel.FriendsOnly,wishListRepository),
+            (await WishList.CreateAsync(users[0].Id, "wishList 1", "wishList 1 description", VisabilityLevel.Public,wishListRepository))!,
+            (await WishList.CreateAsync(users[0].Id, "wishList 2", "wishList 2 description", VisabilityLevel.FriendsOnly,wishListRepository))!,
         ];
 
-        WishlistItem[] wishlistItems =
-        [
-            WishlistItem.Create("item 1", " item 1 test description. Owned by wishlist 1", "http://somesite/items/alotofmoney").Value,
-            WishlistItem.Create("item 2", " item 2 test description. Owned by wishlist 1","http://somesite/items/rabbit").Value,
-            WishlistItem.Create("item 3", " item 3 test description. Owned by wishlist 1","http://somesite/items/item3").Value,
-            WishlistItem.Create("item 4", " item 4 test description. Owned by wishlist 1","http://somesite/items/item4").Value,
-            WishlistItem.Create("item 5", " item 5 test description. Owned by wishlist 1","http://somesite/items/item5").Value,
-            WishlistItem.Create("item 6", " item 6 test description. Owned by wishlist 1","http://somesite/items/item6").Value,
-            WishlistItem.Create("item 7", " item 7 test description. Owned by wishlist 1","http://somesite/items/item7").Value,
-            WishlistItem.Create("item 8", " item 8 test description. Owned by wishlist 1","http://somesite/items/item8").Value,
-            WishlistItem.Create("item 9", " item 9 test description. Owned by wishlist 1","http://somesite/items/item9").Value,
-            WishlistItem.Create("item 10", " item 10 test description. Owned by wishlist 1","http://somesite/items/item10").Value,
-        ];
-
+        WishlistItem[] wishlistItems = CreateItems("wishlist 1", 10);
         foreach (var wishlistItem in wishlistItems)
         {
             _ = wishLists[0].AddItem(wishlistItem);
@@ -80,4 +90,30 @@ public static class DbInitializer
 
         return wishLists;
     }
+
+    private static WishlistItem[] CreateItems(string suffix, int count)
+    {
+        return Enumerable.Range(1, count)
+            .Select(number => WishlistItem.Create(string.Join(" ", "item", number, suffix), $"item {number} test description", $"http://somesite/items/item{number}"))
+            .Select(e => e.Value)
+            .ToArray()!;
+    }
+
+    private static User[] CreateTestUsers(int startNumber, int count, IPasswordHasher passwordHasher)
+    {
+        return Enumerable.Range(startNumber, count)
+          .Select(number => User.Create($"test{number}@test.com", $"test user {number}", 18, "test", passwordHasher))
+          .Select(e => e.Value)
+          .ToArray()!;
+    }
+
+
+    private static User[] CreateUsersFromNamesArray(IPasswordHasher passwordHasher)
+    {
+        return _fakeNames
+          .Select((name, number) => User.Create($"test{number}@test.com", name, 18, "test", passwordHasher))
+          .Select(e => e.Value)
+          .ToArray()!;
+    }
+
 }
