@@ -45,15 +45,15 @@ public class UserProfileReadRepository : IUserProfileReadRepository
         var multi = await _connection.QueryMultipleAsync(query,
             new
             {
-                FilteringName =$"%{filteringName}%",
+                FilteringName = $"%{filteringName}%",
                 OrderBy = orderBy,
                 PageSize = pageSize,
                 PageNumber = pageNumber,
                 Offse = offset
             });
 
-    var items = await multi.ReadAsync<UserProfileReadModel>();
-    var totalItems = await multi.ReadSingleAsync<int>();
+        var items = await multi.ReadAsync<UserProfileReadModel>();
+        var totalItems = await multi.ReadSingleAsync<int>();
 
         return new PagedCollection<UserProfileReadModel>(items, totalItems, pageNumber, pageSize);
     }

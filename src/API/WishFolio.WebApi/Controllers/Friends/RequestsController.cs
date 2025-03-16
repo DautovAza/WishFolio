@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using MediatR;
 using AutoMapper;
 using WishFolio.WebApi.Controllers.Abstractions;
+using WishFolio.WebApi.Controllers.Common.Models;
 using WishFolio.WebApi.Controllers.Friends.ViewModels;
+using WishFolio.Domain.Abstractions.Entities;
 using WishFolio.Domain.Entities.UserAgregate.Friends;
 using WishFolio.Application.UseCases.Friends.Queries.Dtos;
 using WishFolio.Application.UseCases.Friends.Commands.GetFriends;
@@ -49,14 +51,34 @@ public class RequestsController : MappingResultHandlerControllerBase
     }
 
     [HttpGet("incoming")]
-    public Task<ActionResult<IEnumerable<FriendModel>>> GetIncomingRequests()
+    public Task<ActionResult<PagedCollection<FriendModel>>> GetIncomingRequests(RequestFilteringModel filteringModel, RequestPageModel pageModel)
     {
-        return  HandleRequestResult<IEnumerable<FriendDto>, IEnumerable<FriendModel>>(new GetFriendsQuery(FriendshipStatus.Requested));
+        var filteringInfo = new FilteringInfo
+        {
+            FilterName = filteringModel.FilterName,
+            OrderBy = filteringModel.OrderBy
+        };
+        var pageInfo = new PageInfo
+        {
+            CurrentPageNumber = pageModel.PageNumber,
+            PageSize = pageModel.PageSize,
+        };
+        return  HandleRequestResult<PagedCollection<FriendDto>, PagedCollection<FriendModel>>(new GetFriendsQuery(FriendshipStatus.Requested, filteringInfo, pageInfo));
     }
 
     [HttpGet("sent")]
-    public  Task<ActionResult<IEnumerable<FriendModel>>> GetSentRequests()
+    public  Task<ActionResult<PagedCollection<FriendModel>>> GetSentRequests(RequestFilteringModel filteringModel, RequestPageModel pageModel)
     {
-        return HandleRequestResult<IEnumerable<FriendDto>, IEnumerable<FriendModel>>(new GetFriendsQuery(FriendshipStatus.Pending));
+        var filteringInfo = new FilteringInfo
+        {
+            FilterName = filteringModel.FilterName,
+            OrderBy = filteringModel.OrderBy
+        };
+        var pageInfo = new PageInfo
+        {
+            CurrentPageNumber = pageModel.PageNumber,
+            PageSize = pageModel.PageSize,
+        };
+        return HandleRequestResult<PagedCollection<FriendDto>, PagedCollection<FriendModel>>(new GetFriendsQuery(FriendshipStatus.Pending, filteringInfo, pageInfo));
     }
 }

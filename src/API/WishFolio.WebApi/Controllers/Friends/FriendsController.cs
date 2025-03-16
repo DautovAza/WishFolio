@@ -8,6 +8,8 @@ using WishFolio.Application.UseCases.Friends.Commands.DeleteFriend;
 using WishFolio.Application.UseCases.Friends.Commands.GetFriends;
 using WishFolio.WebApi.Controllers.Abstractions;
 using WishFolio.WebApi.Controllers.Friends.ViewModels;
+using WishFolio.WebApi.Controllers.Common.Models;
+using WishFolio.Domain.Abstractions.Entities;
 
 namespace WishFolio.WebApi.Controllers.Friends;
 
@@ -22,9 +24,19 @@ public class FriendsController : MappingResultHandlerControllerBase
     { }
 
     [HttpGet]
-    public Task<ActionResult<IEnumerable<FriendModel>>> GetFriends()
+    public Task<ActionResult<PagedCollection<FriendModel>>> GetFriends(RequestFilteringModel filteringModel, RequestPageModel pageModel)
     {
-        return HandleRequestResult<IEnumerable<FriendDto>, IEnumerable<FriendModel>>(new GetFriendsQuery(FriendshipStatus.Accepted));
+        var filteringInfo = new FilteringInfo
+        {
+            FilterName = filteringModel.FilterName,
+            OrderBy = filteringModel.OrderBy
+        };
+        var pageInfo = new PageInfo
+        {
+            CurrentPageNumber = pageModel.PageNumber,
+            PageSize = pageModel.PageSize,
+        };
+        return HandleRequestResult<PagedCollection<FriendDto>, PagedCollection<FriendModel>>(new GetFriendsQuery(FriendshipStatus.Accepted,filteringInfo, pageInfo));
     }
 
     [HttpDelete("{friendId}")]

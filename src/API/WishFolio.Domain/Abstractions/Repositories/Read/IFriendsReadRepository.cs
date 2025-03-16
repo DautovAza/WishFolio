@@ -1,9 +1,10 @@
-﻿using WishFolio.Domain.Entities.ReadModels.Friends;
+﻿using WishFolio.Domain.Abstractions.Entities;
+using WishFolio.Domain.Entities.ReadModels.Friends;
 using WishFolio.Domain.Entities.UserAgregate.Friends;
 
 namespace WishFolio.Domain.Abstractions.Repositories.Read;
 
 public interface IFriendsReadRepository
 {
-    Task<IEnumerable<FriendReadModel>> GetUserFriendsAsync(Guid userId, FriendshipStatus friendshipStatus);
+    Task<PagedCollection<FriendReadModel>> GetUserFrindsAsync(Guid userId, FriendshipStatus friendshipStatus, FilteringInfo filteringInfo, PageInfo pageInfo);
 }
