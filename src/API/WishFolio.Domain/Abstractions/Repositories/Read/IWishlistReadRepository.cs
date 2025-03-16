@@ -1,5 +1,5 @@
 ﻿using WishFolio.Domain.Abstractions.Entities;
-using WishFolio.Domain.Abstractions.ReadModels.WishLlists;
+using WishFolio.Domain.Entities.ReadModels.WishLlists;
 using WishFolio.Domain.Entities.WishListAgregate;
 
 namespace WishFolio.Domain.Abstractions.Repositories.Read;

@@ -2,8 +2,8 @@
 using Dapper;
 using WishFolio.Domain.Entities.WishListAgregate;
 using WishFolio.Domain.Abstractions.Repositories.Read;
-using WishFolio.Domain.Abstractions.ReadModels.WishLlists;
 using WishFolio.Domain.Abstractions.Entities;
+using WishFolio.Domain.Entities.ReadModels.WishLlists;
 
 namespace WishFolio.Infrastructure.DAL.Read.Repositories;
 

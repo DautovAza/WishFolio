@@ -1,8 +1,8 @@
 ﻿using System.Data;
 using Dapper;
 using WishFolio.Domain.Abstractions.Entities;
-using WishFolio.Domain.Abstractions.ReadModels.Users;
 using WishFolio.Domain.Abstractions.Repositories.Read;
+using WishFolio.Domain.Entities.ReadModels.Users;
 
 namespace WishFolio.Infrastructure.DAL.Read.Repositories;
 

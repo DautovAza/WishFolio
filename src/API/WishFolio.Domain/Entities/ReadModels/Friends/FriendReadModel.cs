@@ -1,6 +1,6 @@
 ﻿using WishFolio.Domain.Entities.UserAgregate.Friends;
 
-namespace WishFolio.Domain.Abstractions.ReadModels.Friends;
+namespace WishFolio.Domain.Entities.ReadModels.Friends;
 
 public class FriendReadModel
 {

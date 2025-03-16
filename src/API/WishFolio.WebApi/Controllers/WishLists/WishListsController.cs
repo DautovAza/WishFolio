@@ -1,17 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using MediatR;
-using WishFolio.WebApi.Controllers.Abstractions;
+using AutoMapper;
+using WishFolio.Domain.Abstractions.Entities;
 using WishFolio.Application.UseCases.Wishlists.Queries.Dtos;
 using WishFolio.Application.UseCases.Wishlists.Queries.GetWishLists;
-using WishFolio.Application.UseCases.WishListItems.Queries.GetWishListItemDetail;
 using WishFolio.Application.UseCases.Wishlists.Commands.CreateWishList;
 using WishFolio.Application.UseCases.Wishlists.Commands.RemoveWishList;
-using AutoMapper;
-using WishFolio.WebApi.Controllers.WishLists.ViewModels.WishLists;
-using WishFolio.WebApi.Controllers.WishLists.ViewModels.Items;
 using WishFolio.Application.UseCases.Wishlists.Queries.GetWishlistItems;
-using WishFolio.Domain.Abstractions.Entities;
+using WishFolio.Application.UseCases.WishListItems.Queries.GetWishListItemDetail;
+using WishFolio.WebApi.Controllers.Abstractions;
+using WishFolio.WebApi.Controllers.Common.Models;
+using WishFolio.WebApi.Controllers.WishLists.ViewModels.Items;
+using WishFolio.WebApi.Controllers.WishLists.ViewModels.WishLists;
 
 namespace WishFolio.WebApi.Controllers.WishLists;
 
@@ -38,9 +39,10 @@ public class WishListsController : MappingResultHandlerControllerBase
     }   
     
     [HttpGet("{wishListName}")]
-    public async Task<ActionResult<PagedCollection<WishListItemModel>>> GetWishlistItems([FromRoute] Guid userId, [FromRoute] string wishListName, [FromQuery] int pageNumber=1,int pageSize=3)
+    public async Task<ActionResult<PagedCollection<WishListItemModel>>> GetWishlistItems([FromRoute] Guid userId, [FromRoute] string wishListName, RequestPageModel pageModel)
     {
-        return await HandleRequestResult<PagedCollection<WishListItemDto>, PagedCollection< WishListItemModel>>(new GetWishlistItemsQuery(userId, wishListName,pageNumber,pageSize));
+        return await HandleRequestResult<PagedCollection<WishListItemDto>, PagedCollection< WishListItemModel>>(
+            new GetWishlistItemsQuery(userId, wishListName, pageModel.PageNumber, pageModel.PageSize));
     }
 
     [HttpPost]

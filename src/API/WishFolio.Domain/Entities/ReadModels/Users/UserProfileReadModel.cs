@@ -1,4 +1,4 @@
-﻿namespace WishFolio.Domain.Abstractions.ReadModels.Users;
+﻿namespace WishFolio.Domain.Entities.ReadModels.Users;
 
 public class UserProfileReadModel
 {

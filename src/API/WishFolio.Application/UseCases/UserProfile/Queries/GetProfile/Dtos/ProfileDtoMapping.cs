@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using WishFolio.Domain.Abstractions.ReadModels.Users;
+using WishFolio.Domain.Entities.ReadModels.Users;
 
 namespace WishFolio.Application.UseCases.UserProfile.Queries.GetProfile.Dtos;
 

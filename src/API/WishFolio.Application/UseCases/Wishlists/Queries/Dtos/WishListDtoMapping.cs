@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using WishFolio.Domain.Abstractions.ReadModels.WishLlists;
+using WishFolio.Domain.Entities.ReadModels.WishLlists;
 using WishFolio.Domain.Entities.WishListAgregate;
 
 namespace WishFolio.Application.UseCases.Wishlists.Queries.Dtos;

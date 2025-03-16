@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using WishFolio.Domain.Abstractions.ReadModels.Friends;
+using WishFolio.Domain.Entities.ReadModels.Friends;
 
 namespace WishFolio.Application.UseCases.Friends.Queries.Dtos;
 

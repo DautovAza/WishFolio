@@ -1,5 +1,5 @@
 ﻿using WishFolio.Domain.Abstractions.Entities;
-using WishFolio.Domain.Abstractions.ReadModels.Users;
+using WishFolio.Domain.Entities.ReadModels.Users;
 
 namespace WishFolio.Domain.Abstractions.Repositories.Read;
 

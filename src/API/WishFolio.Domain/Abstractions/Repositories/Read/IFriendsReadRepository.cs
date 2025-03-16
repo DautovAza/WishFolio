@@ -1,4 +1,4 @@
-﻿using WishFolio.Domain.Abstractions.ReadModels.Friends;
+﻿using WishFolio.Domain.Entities.ReadModels.Friends;
 using WishFolio.Domain.Entities.UserAgregate.Friends;
 
 namespace WishFolio.Domain.Abstractions.Repositories.Read;
